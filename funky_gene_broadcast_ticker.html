@@ -179,8 +179,7 @@
       </div>
 
       <div class="crawl-window">
-        <div class="crawl" id="crawl">
-          <!-- TEST DATA ONLY. Replace with RACE RESULT data later. -->
+<div class="crawl" id="crawl" data-source="fake">          <!-- TEST DATA ONLY. Replace with RACE RESULT data later. -->
           <div class="item">
             <span class="tag leader">LEADER</span>
             <span class="bib">#101</span>
@@ -252,5 +251,20 @@
     </section>
   </main>
 <script src="fake_race_result_data.js"></script>
+  <script>
+const crawl = document.getElementById("crawl");
+const runners = window.FAKE_RACE_RESULT_DATA.runners;
+
+crawl.innerHTML = runners.map((runner, index) => `
+  <div class="item">
+    <span class="tag ${index === 0 ? "leader" : ""}">${index === 0 ? "LEADER" : "SPLIT"}</span>
+    <span class="bib">#${runner.bib}</span>
+    <span>${runner.name}</span>
+    <span class="separator">•</span>
+    <span>${runner.split}</span>
+    <span class="time">${runner.time}</span>
+  </div>
+`).join("");
+</script>
 </body>
 </html>
