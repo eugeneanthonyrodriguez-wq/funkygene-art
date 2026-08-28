@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Funky Gene Live — Runner Crossing</title>
+<style>
+  :root{
+    --deep-blue:#0B2D4D;
+    --ocean-blue:#195E7A;
+    --emerald:#2A7A5E;
+    --sunset-orange:#FF6A3D;
+    --white:#EAEAF1;
+    --gold:#FFD23F;
+  }
+
+  html,body{
+    margin:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:transparent;
+    font-family:Arial, Helvetica, sans-serif;
+  }
+
+  .stage{
+    position:relative;
+    width:100vw;
+    height:100vh;
+    background:transparent;
+  }
+
+  .crossing-card{
+    position:absolute;
+    left:70px;
+    bottom:120px;
+    width:650px;
+    color:var(--white);
+    filter:drop-shadow(0 8px 16px rgba(0,0,0,.42));
+    animation:slideIn .55s ease-out both;
+  }
+
+  .top-strip{
+    height:38px;
+    padding:0 16px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:var(--ocean-blue);
+    border-radius:8px 8px 0 0;
+    box-sizing:border-box;
+    font-size:14px;
+    font-weight:900;
+    letter-spacing:1px;
+  }
+
+  .live{
+    color:var(--gold);
+    display:flex;
+    align-items:center;
+    gap:7px;
+  }
+
+  .live-dot{
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    background:var(--gold);
+  }
+
+  .headline{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:linear-gradient(90deg,var(--deep-blue),var(--ocean-blue));
+    border-bottom:3px solid var(--emerald);
+    padding:15px 18px;
+  }
+
+  .headline-main{
+    font-size:25px;
+    font-weight:900;
+    letter-spacing:.5px;
+  }
+
+  .timing-point{
+    padding:8px 12px;
+    background:var(--emerald);
+    border-radius:4px;
+    font-size:15px;
+    font-weight:900;
+    letter-spacing:.7px;
+  }
+
+  .runner{
+    display:grid;
+    grid-template-columns:110px 1fr 160px;
+    align-items:center;
+    background:rgba(234,234,241,.98);
+    color:var(--deep-blue);
+    min-height:112px;
+  }
+
+  .bib-block{
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    background:var(--gold);
+    color:var(--deep-blue);
+  }
+
+  .bib-label{
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:1.3px;
+    margin-bottom:3px;
+  }
+
+  .bib-number{
+    font-size:38px;
+    font-weight:900;
+    line-height:1;
+  }
+
+  .identity{
+    padding:0 18px;
+    min-width:0;
+  }
+
+  .name{
+    font-size:28px;
+    font-weight:900;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+
+  .detail{
+    margin-top:8px;
+    font-size:16px;
+    font-weight:800;
+    color:var(--ocean-blue);
+  }
+
+  .time-block{
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    background:var(--deep-blue);
+    color:var(--white);
+  }
+
+  .time-label{
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:1.2px;
+    color:var(--gold);
+  }
+
+  .time{
+    margin-top:5px;
+    font-size:27px;
+    font-weight:900;
+  }
+
+  .footer{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    min-height:38px;
+    padding:0 14px;
+    background:rgba(11,45,77,.94);
+    border-radius:0 0 8px 8px;
+    font-size:14px;
+    font-weight:800;
+  }
+
+  .position{
+    color:var(--white);
+  }
+
+  .position strong{
+    color:var(--sunset-orange);
+  }
+
+  .movement{
+    color:var(--gold);
+  }
+
+  @keyframes slideIn{
+    from{
+      opacity:0;
+      transform:translateX(-42px);
+    }
+    to{
+      opacity:1;
+      transform:translateX(0);
+    }
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .crossing-card{animation:none;}
+  }
+</style>
+</head>
+<body>
+<main class="stage">
+  <section class="crossing-card" aria-label="Runner timing point update">
+    <div class="top-strip">
+      <span>BAY AREA 100</span>
+      <span class="live"><span class="live-dot"></span>LIVE TIMING</span>
+    </div>
+
+    <div class="headline">
+      <div class="headline-main">RUNNER CROSSING</div>
+      <div class="timing-point">SKYLINE GATE</div>
+    </div>
+
+    <div class="runner">
+      <div class="bib-block">
+        <div class="bib-label">BIB</div>
+        <div class="bib-number">127</div>
+      </div>
+
+      <div class="identity">
+        <div class="name">TEST RUNNER 01</div>
+        <div class="detail">Timing point update • TEST DATA</div>
+      </div>
+
+      <div class="time-block">
+        <div class="time-label">ELAPSED</div>
+        <div class="time">7:44:22</div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <span class="position">Position: <strong>3rd overall</strong></span>
+      <span class="movement">▲ 2 positions</span>
+    </div>
+  </section>
+</main>
+</body>
+</html>
