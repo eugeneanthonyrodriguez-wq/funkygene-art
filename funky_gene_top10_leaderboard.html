@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Funky Gene Live — Top 10 Leaderboard</title>
+<style>
+  :root{
+    --deep-blue:#0B2D4D;
+    --ocean-blue:#195E7A;
+    --emerald:#2A7A5E;
+    --sunset-orange:#FF6A3D;
+    --white:#EAEAF1;
+    --gold:#FFD23F;
+  }
+
+  html,body{
+    margin:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:transparent;
+    font-family:Arial, Helvetica, sans-serif;
+  }
+
+  .stage{
+    position:relative;
+    width:100vw;
+    height:100vh;
+    background:transparent;
+  }
+
+  .board{
+    position:absolute;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    width:1040px;
+    color:var(--white);
+    filter:drop-shadow(0 10px 22px rgba(0,0,0,.42));
+  }
+
+  .topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    height:44px;
+    padding:0 18px;
+    background:var(--ocean-blue);
+    border-radius:10px 10px 0 0;
+    box-sizing:border-box;
+    font-size:15px;
+    font-weight:900;
+    letter-spacing:1px;
+  }
+
+  .live{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:var(--gold);
+  }
+
+  .dot{
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:var(--gold);
+  }
+
+  .headline{
+    display:grid;
+    grid-template-columns:1fr 220px;
+    background:linear-gradient(90deg,var(--deep-blue),var(--ocean-blue));
+    border-bottom:3px solid var(--emerald);
+  }
+
+  .headline > div{
+    padding:16px 20px;
+  }
+
+  .title{
+    font-size:32px;
+    font-weight:900;
+    letter-spacing:.4px;
+  }
+
+  .sub{
+    margin-top:5px;
+    font-size:15px;
+    font-weight:800;
+    color:rgba(234,234,241,.82);
+  }
+
+  .split{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    background:rgba(42,122,94,.48);
+    text-align:center;
+  }
+
+  .split-label{
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:1.2px;
+    color:var(--gold);
+  }
+
+  .split-name{
+    margin-top:5px;
+    font-size:20px;
+    font-weight:900;
+  }
+
+  .header-row,
+  .row{
+    display:grid;
+    grid-template-columns:76px 80px 1fr 150px 145px;
+    align-items:center;
+  }
+
+  .header-row{
+    min-height:36px;
+    background:rgba(11,45,77,.96);
+    border-bottom:1px solid rgba(234,234,241,.18);
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:1.1px;
+    color:rgba(234,234,241,.78);
+  }
+
+  .rows{
+    background:rgba(234,234,241,.98);
+    color:var(--deep-blue);
+    border-radius:0 0 10px 10px;
+    overflow:hidden;
+  }
+
+  .row{
+    min-height:48px;
+    border-bottom:1px solid rgba(11,45,77,.16);
+    font-size:18px;
+    box-sizing:border-box;
+  }
+
+  .row:last-child{
+    border-bottom:none;
+  }
+
+  .row:nth-child(even){
+    background:rgba(11,45,77,.035);
+  }
+
+  .cell{
+    padding:0 14px;
+    min-width:0;
+  }
+
+  .place{
+    height:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:0;
+    font-size:23px;
+    font-weight:900;
+    background:rgba(11,45,77,.06);
+  }
+
+  .row.first .place{
+    background:var(--gold);
+  }
+
+  .bib{
+    font-weight:900;
+    color:var(--sunset-orange);
+  }
+
+  .name{
+    font-weight:900;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+
+  .time{
+    text-align:right;
+    font-weight:900;
+  }
+
+  .gap{
+    text-align:right;
+    font-weight:800;
+    color:var(--ocean-blue);
+  }
+
+  .footer{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:8px;
+    font-size:13px;
+    font-weight:800;
+    letter-spacing:.7px;
+  }
+
+  .brand,
+  .note{
+    background:rgba(11,45,77,.9);
+    padding:8px 11px;
+  }
+
+  .brand{
+    border-left:4px solid var(--emerald);
+  }
+</style>
+</head>
+<body>
+<main class="stage">
+  <section class="board" aria-label="Top ten live leaderboard">
+    <div class="topbar">
+      <span>BAY AREA 100</span>
+      <span class="live"><span class="dot"></span>LIVE RESULTS</span>
+    </div>
+
+    <div class="headline">
+      <div>
+        <div class="title">TOP 10 OVERALL</div>
+        <div class="sub">Live race leaderboard</div>
+      </div>
+      <div class="split">
+        <div class="split-label">LAST SPLIT</div>
+        <div class="split-name">SKYLINE GATE</div>
+      </div>
+    </div>
+
+    <div class="header-row">
+      <div class="cell" style="text-align:center;">POS</div>
+      <div class="cell">BIB</div>
+      <div class="cell">RUNNER</div>
+      <div class="cell" style="text-align:right;">TIME</div>
+      <div class="cell" style="text-align:right;">GAP</div>
+    </div>
+
+    <div class="rows">
+      <!-- TEST DATA ONLY. Replace with RACE RESULT later. -->
+      <div class="row first">
+        <div class="cell place">1</div>
+        <div class="cell bib">101</div>
+        <div class="cell name">TEST RUNNER 01</div>
+        <div class="cell time">5:41:18</div>
+        <div class="cell gap">LEADER</div>
+      </div>
+      <div class="row">
+        <div class="cell place">2</div>
+        <div class="cell bib">102</div>
+        <div class="cell name">TEST RUNNER 02</div>
+        <div class="cell time">5:46:31</div>
+        <div class="cell gap">+5:13</div>
+      </div>
+      <div class="row">
+        <div class="cell place">3</div>
+        <div class="cell bib">211</div>
+        <div class="cell name">TEST RUNNER 03</div>
+        <div class="cell time">5:51:07</div>
+        <div class="cell gap">+9:49</div>
+      </div>
+      <div class="row">
+        <div class="cell place">4</div>
+        <div class="cell bib">178</div>
+        <div class="cell name">TEST RUNNER 04</div>
+        <div class="cell time">5:56:42</div>
+        <div class="cell gap">+15:24</div>
+      </div>
+      <div class="row">
+        <div class="cell place">5</div>
+        <div class="cell bib">305</div>
+        <div class="cell name">TEST RUNNER 05</div>
+        <div class="cell time">6:02:18</div>
+        <div class="cell gap">+21:00</div>
+      </div>
+      <div class="row">
+        <div class="cell place">6</div>
+        <div class="cell bib">144</div>
+        <div class="cell name">TEST RUNNER 06</div>
+        <div class="cell time">6:05:10</div>
+        <div class="cell gap">+23:52</div>
+      </div>
+      <div class="row">
+        <div class="cell place">7</div>
+        <div class="cell bib">276</div>
+        <div class="cell name">TEST RUNNER 07</div>
+        <div class="cell time">6:08:41</div>
+        <div class="cell gap">+27:23</div>
+      </div>
+      <div class="row">
+        <div class="cell place">8</div>
+        <div class="cell bib">119</div>
+        <div class="cell name">TEST RUNNER 08</div>
+        <div class="cell time">6:12:04</div>
+        <div class="cell gap">+30:46</div>
+      </div>
+      <div class="row">
+        <div class="cell place">9</div>
+        <div class="cell bib">333</div>
+        <div class="cell name">TEST RUNNER 09</div>
+        <div class="cell time">6:15:22</div>
+        <div class="cell gap">+34:04</div>
+      </div>
+      <div class="row">
+        <div class="cell place">10</div>
+        <div class="cell bib">190</div>
+        <div class="cell name">TEST RUNNER 10</div>
+        <div class="cell time">6:18:57</div>
+        <div class="cell gap">+37:39</div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <span class="brand">FUNKY GENE LIVE</span>
+      <span class="note">TEST DATA • RACE RESULT CONNECTION COMING LATER</span>
+    </div>
+  </section>
+</main>
+</body>
+</html>
