@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Funky Gene Live — Top 5 Leaders</title>
+<style>
+  :root{
+    --deep-blue:#0B2D4D;
+    --ocean-blue:#195E7A;
+    --emerald:#2A7A5E;
+    --sunset-orange:#FF6A3D;
+    --white:#EAEAF1;
+    --gold:#FFD23F;
+  }
+
+  html,body{
+    margin:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:transparent;
+    font-family:Arial, Helvetica, sans-serif;
+  }
+
+  .stage{
+    position:relative;
+    width:100vw;
+    height:100vh;
+    background:transparent;
+  }
+
+  .leaders{
+    position:absolute;
+    left:70px;
+    bottom:110px;
+    width:610px;
+    filter:drop-shadow(0 7px 14px rgba(0,0,0,.40));
+  }
+
+  .topline{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    height:38px;
+    padding:0 16px;
+    background:var(--ocean-blue);
+    color:var(--white);
+    font-size:17px;
+    font-weight:900;
+    letter-spacing:.8px;
+    border-radius:8px 8px 0 0;
+    box-sizing:border-box;
+  }
+
+  .live{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    font-size:13px;
+    letter-spacing:1.2px;
+    color:var(--gold);
+  }
+
+  .live-dot{
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    background:var(--gold);
+  }
+
+  .section-head{
+    display:grid;
+    grid-template-columns:1fr 150px;
+    background:linear-gradient(90deg,var(--deep-blue),var(--ocean-blue));
+    color:var(--white);
+    border-bottom:3px solid var(--emerald);
+  }
+
+  .section-head div{
+    padding:13px 16px 12px;
+    font-size:24px;
+    font-weight:800;
+  }
+
+  .section-head .split{
+    text-align:center;
+    background:rgba(42,122,94,.45);
+    font-size:18px;
+    letter-spacing:.5px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .rows{
+    background:rgba(234,234,241,.97);
+    border-radius:0 0 8px 8px;
+    overflow:hidden;
+  }
+
+  .row{
+    display:grid;
+    grid-template-columns:62px 70px 1fr 142px;
+    align-items:center;
+    min-height:52px;
+    color:var(--deep-blue);
+    border-bottom:1px solid rgba(11,45,77,.18);
+    box-sizing:border-box;
+  }
+
+  .row:last-child{
+    border-bottom:none;
+  }
+
+  .pos{
+    height:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:25px;
+    font-weight:900;
+    background:rgba(11,45,77,.07);
+  }
+
+  .row.first .pos{
+    background:var(--gold);
+  }
+
+  .bib{
+    font-size:20px;
+    font-weight:900;
+    color:var(--sunset-orange);
+  }
+
+  .name{
+    font-size:21px;
+    font-weight:800;
+    letter-spacing:.1px;
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+  }
+
+  .time{
+    text-align:right;
+    padding-right:16px;
+    font-size:21px;
+    font-weight:900;
+    color:var(--deep-blue);
+  }
+
+  .footer{
+    margin-top:7px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    color:var(--white);
+    font-size:13px;
+    letter-spacing:.8px;
+    opacity:.9;
+  }
+
+  .brand{
+    background:rgba(11,45,77,.92);
+    padding:7px 10px;
+    border-left:4px solid var(--emerald);
+  }
+
+  .updated{
+    background:rgba(11,45,77,.82);
+    padding:7px 10px;
+  }
+</style>
+</head>
+
+<body>
+<main class="stage">
+  <section class="leaders" aria-label="Top five race leaders">
+    <div class="topline">
+      <span>BAY AREA 100</span>
+      <span class="live"><span class="live-dot"></span>LIVE RESULTS</span>
+    </div>
+
+    <div class="section-head">
+      <div>LEADING MEN</div>
+      <div class="split">SKYLINE GATE</div>
+    </div>
+
+    <div class="rows">
+      <!-- TEST DATA ONLY. Replace with RACE RESULT later. -->
+      <div class="row first">
+        <div class="pos">1</div>
+        <div class="bib">101</div>
+        <div class="name">TEST RUNNER 01</div>
+        <div class="time">5:41:18</div>
+      </div>
+
+      <div class="row">
+        <div class="pos">2</div>
+        <div class="bib">102</div>
+        <div class="name">TEST RUNNER 02</div>
+        <div class="time">5:46:31</div>
+      </div>
+
+      <div class="row">
+        <div class="pos">3</div>
+        <div class="bib">211</div>
+        <div class="name">TEST RUNNER 03</div>
+        <div class="time">5:51:07</div>
+      </div>
+
+      <div class="row">
+        <div class="pos">4</div>
+        <div class="bib">178</div>
+        <div class="name">TEST RUNNER 04</div>
+        <div class="time">5:56:42</div>
+      </div>
+
+      <div class="row">
+        <div class="pos">5</div>
+        <div class="bib">305</div>
+        <div class="name">TEST RUNNER 05</div>
+        <div class="time">6:02:18</div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <span class="brand">FUNKY GENE LIVE</span>
+      <span class="updated">TEST DATA • RACE RESULT CONNECTION COMING LATER</span>
+    </div>
+  </section>
+</main>
+</body>
+</html>
