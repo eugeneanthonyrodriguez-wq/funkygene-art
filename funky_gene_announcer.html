@@ -4,551 +4,1911 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Funky Gene Announcer Dashboard</title>
+<title>Funky Gene | Race Announcer</title>
+
+<!-- LEAFLET MAP -->
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
 
 <style>
-  * {
-    box-sizing: border-box;
-  }
 
-  body {
-    margin: 0;
-    background: #071521;
-    color: #EAEAF1;
-    font-family: Arial, Helvetica, sans-serif;
+:root {
+  --deep-blue:#0B2D4D;
+  --ocean:#195E7A;
+  --green:#2A7A5E;
+  --orange:#FF6A3D;
+  --white:#EAEAF1;
+  --yellow:#FFD23F;
+
+  --bg:#06131d;
+  --panel:#0d2233;
+  --panel2:#102b3f;
+  --line:#23485f;
+  --muted:#94adbd;
+}
+
+* {
+  box-sizing:border-box;
+}
+
+html,
+body {
+  margin:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:var(--bg);
+  color:var(--white);
+  font-family:
+    Inter,
+    Arial,
+    Helvetica,
+    sans-serif;
+}
+
+/* =========================
+   FULL 16:9 APP
+========================= */
+
+.app {
+  height:100vh;
+  width:100vw;
+
+  display:grid;
+
+  grid-template-rows:
+    76px
+    52px
+    minmax(0,1fr);
+
+  overflow:hidden;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+header {
+  background:
+    linear-gradient(
+      90deg,
+      var(--deep-blue),
+      #113f5c,
+      var(--ocean)
+    );
+
+  border-bottom:4px solid var(--orange);
+
+  padding:0 24px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.brand {
+  display:flex;
+  align-items:center;
+  gap:16px;
+}
+
+.logo-box {
+  width:47px;
+  height:47px;
+
+  border-radius:50%;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  background:var(--orange);
+
+  color:white;
+
+  font-weight:1000;
+  font-size:20px;
+}
+
+.title {
+  font-size:26px;
+  line-height:1;
+  font-weight:1000;
+  letter-spacing:.5px;
+}
+
+.subtitle {
+  color:#bfd0da;
+  font-size:13px;
+  margin-top:7px;
+  font-weight:700;
+  letter-spacing:.7px;
+}
+
+.header-right {
+  display:flex;
+  align-items:center;
+  gap:16px;
+}
+
+.clock {
+  text-align:right;
+}
+
+.clock-time {
+  font-size:25px;
+  font-weight:900;
+  line-height:1;
+}
+
+.clock-date {
+  margin-top:5px;
+  font-size:11px;
+  color:#b6c9d4;
+}
+
+.live {
+  background:var(--yellow);
+  color:#071521;
+
+  padding:10px 15px;
+
+  border-radius:7px;
+
+  font-weight:1000;
+  font-size:14px;
+}
+
+/* =========================
+   STATUS / SEARCH BAR
+========================= */
+
+.toolbar {
+  height:52px;
+
+  padding:7px 16px;
+
+  background:#081b29;
+
+  border-bottom:1px solid var(--line);
+
+  display:grid;
+
+  grid-template-columns:
+    minmax(280px,1fr)
+    auto
+    auto
+    auto;
+
+  gap:16px;
+
+  align-items:center;
+}
+
+.search-wrap {
+  position:relative;
+}
+
+.search {
+  width:100%;
+  height:36px;
+
+  padding:0 15px 0 38px;
+
+  border-radius:7px;
+
+  border:1px solid #31566e;
+
+  background:#102738;
+
+  color:white;
+
+  font-size:15px;
+
+  outline:none;
+}
+
+.search:focus {
+  border-color:var(--orange);
+}
+
+.search-icon {
+  position:absolute;
+
+  left:13px;
+  top:8px;
+
+  color:#8ea9b9;
+
+  pointer-events:none;
+}
+
+.stat {
+  white-space:nowrap;
+
+  color:#9fb5c4;
+
+  font-size:12px;
+
+  font-weight:700;
+}
+
+.stat strong {
+  color:white;
+}
+
+.connected {
+  color:#73e4a4 !important;
+}
+
+.error {
+  color:var(--orange) !important;
+}
+
+/* =========================
+   MAIN
+========================= */
+
+.main {
+  min-height:0;
+
+  padding:12px;
+
+  display:grid;
+
+  grid-template-columns:
+    minmax(0, 1.55fr)
+    minmax(490px, .9fr);
+
+  gap:12px;
+}
+
+/* =========================
+   MAP SIDE
+========================= */
+
+.map-panel {
+  position:relative;
+
+  min-height:0;
+
+  overflow:hidden;
+
+  border-radius:12px;
+
+  border:1px solid var(--line);
+
+  background:var(--panel);
+}
+
+#map {
+  width:100%;
+  height:100%;
+
+  background:#0b1d29;
+}
+
+.map-overlay {
+  position:absolute;
+
+  z-index:500;
+
+  top:12px;
+  left:12px;
+
+  background:rgba(7,21,33,.90);
+
+  border:1px solid #31566e;
+
+  border-radius:9px;
+
+  padding:10px 13px;
+
+  backdrop-filter:blur(8px);
+
+  pointer-events:none;
+}
+
+.map-title {
+  font-size:15px;
+  font-weight:1000;
+}
+
+.map-sub {
+  font-size:11px;
+  color:#a8bdc9;
+  margin-top:4px;
+}
+
+.map-legend {
+  position:absolute;
+
+  z-index:500;
+
+  left:12px;
+  bottom:12px;
+
+  background:rgba(7,21,33,.92);
+
+  border:1px solid #31566e;
+
+  border-radius:9px;
+
+  padding:8px 11px;
+
+  font-size:11px;
+}
+
+.legend-row {
+  display:flex;
+  align-items:center;
+  gap:7px;
+
+  margin:3px 0;
+}
+
+.legend-dot {
+  width:9px;
+  height:9px;
+
+  border-radius:50%;
+
+  background:var(--orange);
+}
+
+.legend-line {
+  width:19px;
+  height:4px;
+
+  border-radius:4px;
+
+  background:var(--orange);
+}
+
+/* =========================
+   RIGHT DASHBOARD
+========================= */
+
+.right {
+  min-height:0;
+
+  display:grid;
+
+  grid-template-rows:
+    minmax(230px, .8fr)
+    minmax(230px, 1fr);
+
+  gap:12px;
+}
+
+.panel {
+  min-height:0;
+
+  display:flex;
+  flex-direction:column;
+
+  overflow:hidden;
+
+  border:1px solid var(--line);
+
+  border-radius:12px;
+
+  background:var(--panel);
+}
+
+.panel-header {
+  height:44px;
+  min-height:44px;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--deep-blue),
+      #11394f
+    );
+
+  padding:0 14px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  border-bottom:2px solid var(--green);
+}
+
+.panel-title {
+  font-size:15px;
+  font-weight:1000;
+  letter-spacing:.5px;
+}
+
+.panel-count {
+  font-size:10px;
+
+  color:#a9bdc9;
+
+  background:#071923;
+
+  border-radius:20px;
+
+  padding:5px 9px;
+}
+
+.rows {
+  flex:1;
+
+  min-height:0;
+
+  overflow-y:auto;
+  overflow-x:hidden;
+}
+
+/* slim scrollbar */
+
+.rows::-webkit-scrollbar,
+.search-results::-webkit-scrollbar {
+  width:6px;
+}
+
+.rows::-webkit-scrollbar-thumb,
+.search-results::-webkit-scrollbar-thumb {
+  background:#31566e;
+  border-radius:5px;
+}
+
+/* =========================
+   RUNNER ROW
+========================= */
+
+.runner {
+  min-height:57px;
+
+  padding:7px 10px;
+
+  display:grid;
+
+  grid-template-columns:
+    44px
+    62px
+    minmax(0,1fr)
+    92px;
+
+  gap:7px;
+
+  align-items:center;
+
+  border-bottom:1px solid #1d3b4d;
+}
+
+.runner:last-child {
+  border-bottom:none;
+}
+
+.runner:hover {
+  background:#123047;
+}
+
+.place {
+  font-size:20px;
+  font-weight:1000;
+
+  color:#bcd0dc;
+
+  text-align:center;
+}
+
+.runner.first .place {
+  color:var(--yellow);
+}
+
+.runner.first {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(255,210,63,.08),
+      transparent
+    );
+}
+
+.bib {
+  text-align:center;
+
+  padding:6px 4px;
+
+  border-radius:6px;
+
+  background:var(--ocean);
+
+  font-size:12px;
+  font-weight:900;
+}
+
+.runner-name {
+  min-width:0;
+}
+
+.name {
+  font-size:14px;
+  font-weight:1000;
+
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.meta {
+  font-size:10px;
+
+  color:var(--muted);
+
+  margin-top:4px;
+
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.result {
+  text-align:right;
+
+  min-width:0;
+}
+
+.split {
+  color:#77dbad;
+
+  font-size:10px;
+
+  font-weight:900;
+
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.time {
+  margin-top:3px;
+
+  color:white;
+
+  font-size:13px;
+
+  font-weight:1000;
+}
+
+/* =========================
+   SEARCH RESULTS OVERLAY
+========================= */
+
+.search-overlay {
+  display:none;
+
+  position:absolute;
+
+  z-index:1000;
+
+  top:134px;
+  left:16px;
+  right:16px;
+
+  max-height:calc(100vh - 155px);
+
+  background:#091b28;
+
+  border:
+    2px solid
+    var(--orange);
+
+  border-radius:12px;
+
+  box-shadow:
+    0 15px 55px
+    rgba(0,0,0,.55);
+
+  overflow:hidden;
+}
+
+.search-overlay.active {
+  display:block;
+}
+
+.search-header {
+  height:48px;
+
+  background:var(--deep-blue);
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  padding:0 16px;
+}
+
+.search-title {
+  font-size:16px;
+  font-weight:1000;
+}
+
+.search-help {
+  font-size:11px;
+  color:#b9cbd5;
+}
+
+.search-results {
+  overflow-y:auto;
+
+  max-height:
+    calc(100vh - 210px);
+}
+
+.search-results .runner {
+  min-height:64px;
+
+  grid-template-columns:
+    52px
+    72px
+    minmax(0,1fr)
+    130px;
+}
+
+/* =========================
+   EMPTY / ERROR
+========================= */
+
+.empty {
+  height:100%;
+
+  min-height:90px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:20px;
+
+  text-align:center;
+
+  color:#819cac;
+
+  font-size:13px;
+}
+
+/* =========================
+   LEAFLET
+========================= */
+
+.leaflet-control-attribution {
+  font-size:8px !important;
+}
+
+.course-start {
+  background:#2A7A5E;
+  border:3px solid white;
+  border-radius:50%;
+}
+
+.course-finish {
+  background:#FF6A3D;
+  border:3px solid white;
+  border-radius:50%;
+}
+
+/* =========================
+   SMALLER 16:9 LAPTOPS
+========================= */
+
+@media(max-height:800px) {
+
+  .app {
+    grid-template-rows:
+      65px
+      46px
+      minmax(0,1fr);
   }
 
   header {
-    background: linear-gradient(90deg, #0B2D4D, #195E7A);
-    padding: 20px 28px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 4px solid #FF6A3D;
+    padding:0 18px;
   }
 
-  .event-title {
-    font-size: 30px;
-    font-weight: 900;
-    letter-spacing: 1px;
+  .title {
+    font-size:21px;
   }
 
-  .event-subtitle {
-    margin-top: 5px;
-    font-size: 15px;
-    color: #c8d9e4;
+  .logo-box {
+    width:40px;
+    height:40px;
   }
 
-  .live {
-    background: #FFD23F;
-    color: #071521;
-    padding: 9px 16px;
-    border-radius: 8px;
-    font-weight: 900;
+  .toolbar {
+    height:46px;
+    padding:5px 12px;
   }
 
-  .statusbar {
-    background: #0d2233;
-    padding: 10px 28px;
-    font-size: 14px;
-    display: flex;
-    gap: 28px;
-    flex-wrap: wrap;
+  .main {
+    padding:8px;
+    gap:8px;
   }
 
-  .status-good {
-    color: #7ee2a8;
-    font-weight: bold;
+  .right {
+    gap:8px;
   }
 
-  main {
-    padding: 24px;
-  }
-
-  .search-box {
-    width: 100%;
-    background: #102738;
-    border: 2px solid #195E7A;
-    border-radius: 12px;
-    padding: 16px 18px;
-    font-size: 22px;
-    color: white;
-    outline: none;
-    margin-bottom: 24px;
-  }
-
-  .search-box:focus {
-    border-color: #FF6A3D;
-  }
-
-  .dashboard {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 22px;
-  }
-
-  .panel {
-    background: #0d2233;
-    border: 1px solid #23465d;
-    border-radius: 14px;
-    overflow: hidden;
-  }
-
-  .panel-title {
-    padding: 14px 18px;
-    background: #0B2D4D;
-    font-size: 20px;
-    font-weight: 900;
-    border-bottom: 3px solid #2A7A5E;
+  .panel-header {
+    height:38px;
+    min-height:38px;
   }
 
   .runner {
-    display: grid;
-    grid-template-columns: 70px 90px 1fr 140px 150px;
-    align-items: center;
-    gap: 10px;
-
-    padding: 14px 16px;
-    border-bottom: 1px solid #1f4055;
-  }
-
-  .runner:last-child {
-    border-bottom: none;
-  }
-
-  .place {
-    font-size: 25px;
-    font-weight: 900;
-    color: #FFD23F;
-  }
-
-  .bib {
-    background: #195E7A;
-    padding: 7px 10px;
-    border-radius: 7px;
-    font-weight: bold;
-    text-align: center;
+    min-height:48px;
+    padding:5px 8px;
   }
 
   .name {
-    font-size: 20px;
-    font-weight: 800;
-  }
-
-  .secondary {
-    font-size: 13px;
-    color: #9eb4c3;
-    margin-top: 4px;
-  }
-
-  .split {
-    color: #71d7ae;
-    font-weight: 800;
+    font-size:12px;
   }
 
   .time {
-    font-size: 18px;
-    font-weight: 900;
-    text-align: right;
+    font-size:11px;
   }
 
-  .search-results {
-    display: none;
-    margin-bottom: 24px;
-  }
+}
 
-  .search-results.active {
-    display: block;
-  }
-
-  .empty {
-    padding: 30px;
-    text-align: center;
-    color: #8da5b5;
-  }
-
-  .full-panel {
-    margin-top: 22px;
-  }
-
-  #allRunners {
-    max-height: 600px;
-    overflow-y: auto;
-  }
-
-  @media(max-width: 1000px) {
-    .dashboard {
-      grid-template-columns: 1fr;
-    }
-
-    .runner {
-      grid-template-columns: 55px 75px 1fr;
-    }
-
-    .split,
-    .time {
-      grid-column: auto;
-    }
-  }
 </style>
 </head>
 
 <body>
 
+<div class="app">
+
+<!-- =================================
+     HEADER
+================================== -->
+
 <header>
-  <div>
-    <div class="event-title">FUNKY GENE — ANNOUNCER DASHBOARD</div>
-    <div class="event-subtitle">Live RACE RESULT timing information</div>
-  </div>
 
-  <div class="live">● LIVE</div>
-</header>
+  <div class="brand">
 
-<div class="statusbar">
-  <div>
-    RACE RESULT:
-    <span id="connectionStatus">Connecting...</span>
-  </div>
+    <div class="logo-box">
+      FG
+    </div>
 
-  <div>
-    Last update:
-    <strong id="lastUpdate">--</strong>
-  </div>
+    <div>
 
-  <div>
-    Runners:
-    <strong id="runnerCount">0</strong>
-  </div>
-</div>
-
-<main>
-
-<input
-  id="search"
-  class="search-box"
-  type="text"
-  placeholder="Search runner by name, bib, club or race..."
->
-
-<div id="searchPanel" class="panel search-results">
-  <div class="panel-title">RUNNER SEARCH</div>
-  <div id="searchResults"></div>
-</div>
-
-<div class="dashboard">
-
-  <section class="panel">
-    <div class="panel-title">🏆 TOP 5</div>
-    <div id="topFive"></div>
-  </section>
-
-  <section class="panel">
-    <div class="panel-title">🏁 LATEST FINISHERS / RESULTS</div>
-    <div id="latest"></div>
-  </section>
-
-</div>
-
-<section class="panel full-panel">
-  <div class="panel-title">LIVE RACE RESULTS</div>
-  <div id="allRunners"></div>
-</section>
-
-</main>
-
-<script>
-
-const RACE_RESULT_URL =
-"http://localhost/_DEMOE/api/XP7OBROL70L60QAVZX5US6I0UQ7EQYXY";
-
-let raceData = [];
-
-function getValue(runner, possibleNames) {
-  for (const name of possibleNames) {
-    if (
-      runner[name] !== undefined &&
-      runner[name] !== null &&
-      runner[name] !== ""
-    ) {
-      return runner[name];
-    }
-  }
-
-  return "";
-}
-
-function cleanHTML(value) {
-  if (!value) return "";
-
-  const temp = document.createElement("div");
-  temp.innerHTML = String(value);
-
-  return temp.textContent || temp.innerText || "";
-}
-
-function normalizeRunner(runner, index) {
-
-  return {
-    raw: runner,
-
-    place: cleanHTML(
-      getValue(runner, [
-        "Pl",
-        "Place",
-        "Rank",
-        "OverallPlace",
-        "Overall"
-      ])
-    ) || index + 1,
-
-    bib: cleanHTML(
-      getValue(runner, [
-        "Bib",
-        "BibNumber",
-        "StartNo",
-        "StartNumber"
-      ])
-    ),
-
-    name: cleanHTML(
-      getValue(runner, [
-        "Name",
-        "FullName",
-        "DisplayName",
-        "Participant"
-      ])
-    ),
-
-    firstName: cleanHTML(
-      getValue(runner, [
-        "FirstName",
-        "Firstname"
-      ])
-    ),
-
-    lastName: cleanHTML(
-      getValue(runner, [
-        "LastName",
-        "Lastname"
-      ])
-    ),
-
-    club: cleanHTML(
-      getValue(runner, [
-        "Club",
-        "Team",
-        "City"
-      ])
-    ),
-
-    contest: cleanHTML(
-      getValue(runner, [
-        "Contest",
-        "Race",
-        "Competition"
-      ])
-    ),
-
-    split: cleanHTML(
-      getValue(runner, [
-        "Split",
-        "TimingPoint",
-        "Location",
-        "LastSplit"
-      ])
-    ),
-
-    time: cleanHTML(
-      getValue(runner, [
-        "ChipTime",
-        "GunTime",
-        "FinishTime",
-        "Time",
-        "Result"
-      ])
-    ),
-
-    age: cleanHTML(
-      getValue(runner, [
-        "Age",
-        "AgeGroup"
-      ])
-    )
-  };
-}
-
-function runnerName(runner) {
-  if (runner.name) return runner.name;
-
-  return `${runner.firstName} ${runner.lastName}`.trim() || "Unknown Runner";
-}
-
-function runnerHTML(runner) {
-
-  const extra = [
-    runner.club,
-    runner.contest,
-    runner.age ? `Age ${runner.age}` : ""
-  ]
-  .filter(Boolean)
-  .join(" • ");
-
-  return `
-    <div class="runner">
-
-      <div class="place">
-        ${runner.place ? "#" + runner.place : ""}
+      <div class="title">
+        FUNKY GENE RACE COMMAND
       </div>
 
-      <div class="bib">
-        ${runner.bib ? "#" + runner.bib : "—"}
-      </div>
-
-      <div>
-        <div class="name">
-          ${runnerName(runner)}
-        </div>
-
-        <div class="secondary">
-          ${extra}
-        </div>
-      </div>
-
-      <div class="split">
-        ${runner.split || ""}
-      </div>
-
-      <div class="time">
-        ${runner.time || ""}
+      <div class="subtitle">
+        ANNOUNCER • LIVE TIMING • COURSE STATUS
       </div>
 
     </div>
-  `;
+
+  </div>
+
+  <div class="header-right">
+
+    <div class="clock">
+
+      <div
+        class="clock-time"
+        id="clockTime">
+        --:--:--
+      </div>
+
+      <div
+        class="clock-date"
+        id="clockDate">
+      </div>
+
+    </div>
+
+    <div class="live">
+      ● LIVE
+    </div>
+
+  </div>
+
+</header>
+
+<!-- =================================
+     SEARCH / STATUS
+================================== -->
+
+<div class="toolbar">
+
+  <div class="search-wrap">
+
+    <span class="search-icon">
+      ⌕
+    </span>
+
+    <input
+      id="search"
+      class="search"
+      type="text"
+      autocomplete="off"
+      placeholder="Search bib, runner, club, race, age..."
+    >
+
+  </div>
+
+  <div class="stat">
+    RACE RESULT:
+    <strong id="connectionStatus">
+      CONNECTING
+    </strong>
+  </div>
+
+  <div class="stat">
+    UPDATED:
+    <strong id="lastUpdate">
+      --
+    </strong>
+  </div>
+
+  <div class="stat">
+    RUNNERS:
+    <strong id="runnerCount">
+      0
+    </strong>
+  </div>
+
+</div>
+
+<!-- =================================
+     MAIN 16:9 GRID
+================================== -->
+
+<div class="main">
+
+  <!-- MAP -->
+
+  <section class="map-panel">
+
+    <div id="map"></div>
+
+    <div class="map-overlay">
+
+      <div class="map-title">
+        COURSE MAP
+      </div>
+
+      <div
+        class="map-sub"
+        id="mapStatus">
+        Loading NEWMARATHON.gpx…
+      </div>
+
+    </div>
+
+    <div class="map-legend">
+
+      <div class="legend-row">
+        <span class="legend-line"></span>
+        Course
+      </div>
+
+      <div class="legend-row">
+        <span class="legend-dot"></span>
+        Start / Finish
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- RIGHT SIDE -->
+
+  <div class="right">
+
+    <!-- TOP 5 -->
+
+    <section class="panel">
+
+      <div class="panel-header">
+
+        <div class="panel-title">
+          ★ TOP 5
+        </div>
+
+        <div class="panel-count">
+          LIVE LEADERS
+        </div>
+
+      </div>
+
+      <div
+        class="rows"
+        id="topFive">
+      </div>
+
+    </section>
+
+    <!-- LATEST -->
+
+    <section class="panel">
+
+      <div class="panel-header">
+
+        <div class="panel-title">
+          LATEST RESULTS
+        </div>
+
+        <div
+          class="panel-count"
+          id="latestCount">
+          0 RESULTS
+        </div>
+
+      </div>
+
+      <div
+        class="rows"
+        id="latest">
+      </div>
+
+    </section>
+
+  </div>
+
+</div>
+
+</div>
+
+<!-- =================================
+     SEARCH OVERLAY
+================================== -->
+
+<div
+  id="searchOverlay"
+  class="search-overlay">
+
+  <div class="search-header">
+
+    <div class="search-title">
+      RUNNER SEARCH
+    </div>
+
+    <div class="search-help">
+      Clear search box to close
+    </div>
+
+  </div>
+
+  <div
+    id="searchResults"
+    class="search-results">
+  </div>
+
+</div>
+
+<script>
+
+/* =================================
+   RACE RESULT
+================================= */
+
+const RACE_RESULT_URL =
+  "http://localhost/_DEMOE/api/XP7OBROL70L60QAVZX5US6I0UQ7EQYXY";
+
+
+/* =================================
+   RACEMAP PARTICIPANT FEED
+   Saved for future live-map work.
+================================= */
+
+const RACEMAP_ACCESS_URL =
+  "http://localhost/_DEMOE/api/T9LA4GO6TA4ZI3MCCEBKKHEABNPTG1LU";
+
+
+/* =================================
+   GPX COURSE
+================================= */
+
+const GPX_URL =
+  "./NEWMARATHON.gpx";
+
+
+let raceData = [];
+
+
+/* =================================
+   CLOCK
+================================= */
+
+function updateClock() {
+
+  const now =
+    new Date();
+
+  document
+    .getElementById("clockTime")
+    .textContent =
+      now.toLocaleTimeString(
+        [],
+        {
+          hour:"2-digit",
+          minute:"2-digit",
+          second:"2-digit"
+        }
+      );
+
+  document
+    .getElementById("clockDate")
+    .textContent =
+      now.toLocaleDateString(
+        [],
+        {
+          weekday:"short",
+          month:"short",
+          day:"numeric"
+        }
+      );
+
 }
 
-function displayRaceData() {
+updateClock();
 
-  const normalized = raceData.map(normalizeRunner);
+setInterval(
+  updateClock,
+  1000
+);
 
-  document.getElementById("runnerCount").textContent =
-    normalized.length;
 
-  const topFive =
-    normalized.slice(0, 5);
+/* =================================
+   MAP
+================================= */
 
-  document.getElementById("topFive").innerHTML =
-    topFive.length
-      ? topFive.map(runnerHTML).join("")
-      : `<div class="empty">Waiting for leader data...</div>`;
+const map =
+  L.map(
+    "map",
+    {
+      zoomControl:true
+    }
+  );
 
-  const latest =
-    [...normalized]
-      .filter(runner => runner.time || runner.split)
-      .slice(-10)
-      .reverse();
 
-  document.getElementById("latest").innerHTML =
-    latest.length
-      ? latest.map(runnerHTML).join("")
-      : `<div class="empty">Waiting for results...</div>`;
-
-  document.getElementById("allRunners").innerHTML =
-    normalized.length
-      ? normalized.map(runnerHTML).join("")
-      : `<div class="empty">Waiting for race data...</div>`;
-}
-
-function searchRunners() {
-
-  const query =
-    document.getElementById("search")
-      .value
-      .trim()
-      .toLowerCase();
-
-  const panel =
-    document.getElementById("searchPanel");
-
-  const results =
-    document.getElementById("searchResults");
-
-  if (!query) {
-    panel.classList.remove("active");
-    results.innerHTML = "";
-    return;
+L.tileLayer(
+  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+  {
+    maxZoom:19,
+    attribution:
+      "&copy; OpenStreetMap"
   }
+).addTo(map);
 
-  const normalized =
-    raceData.map(normalizeRunner);
 
-  const matches =
-    normalized.filter(runner => {
+/* =================================
+   LOAD GPX
+================================= */
 
-      const searchable = [
-        runnerName(runner),
-        runner.bib,
-        runner.club,
-        runner.contest,
-        runner.age,
-        runner.split
-      ]
-      .join(" ")
-      .toLowerCase();
-
-      return searchable.includes(query);
-    });
-
-  panel.classList.add("active");
-
-  results.innerHTML =
-    matches.length
-      ? matches.slice(0, 25).map(runnerHTML).join("")
-      : `<div class="empty">No runner found.</div>`;
-}
-
-async function updateRaceResults() {
+async function loadCourse() {
 
   const status =
-    document.getElementById("connectionStatus");
+    document.getElementById(
+      "mapStatus"
+    );
 
   try {
 
     const response =
-      await fetch(RACE_RESULT_URL, {
-        cache: "no-store"
-      });
+      await fetch(
+        GPX_URL,
+        {
+          cache:"no-store"
+        }
+      );
 
     if (!response.ok) {
+
+      throw new Error(
+        "GPX not found"
+      );
+
+    }
+
+    const text =
+      await response.text();
+
+    const parser =
+      new DOMParser();
+
+    const xml =
+      parser.parseFromString(
+        text,
+        "application/xml"
+      );
+
+    const points =
+      [
+        ...xml.querySelectorAll(
+          "trkpt"
+        )
+      ];
+
+    if (!points.length) {
+
+      throw new Error(
+        "No GPX track points"
+      );
+
+    }
+
+    const latLngs =
+      points.map(
+        point => [
+
+          Number(
+            point.getAttribute(
+              "lat"
+            )
+          ),
+
+          Number(
+            point.getAttribute(
+              "lon"
+            )
+          )
+
+        ]
+      );
+
+
+    /* COURSE LINE */
+
+    const course =
+      L.polyline(
+        latLngs,
+        {
+          color:"#FF6A3D",
+          weight:5,
+          opacity:.95
+        }
+      )
+      .addTo(map);
+
+
+    /* START */
+
+    const startIcon =
+      L.divIcon(
+        {
+          className:
+            "course-start",
+
+          iconSize:
+            [18,18]
+        }
+      );
+
+    L.marker(
+      latLngs[0],
+      {
+        icon:startIcon
+      }
+    )
+    .addTo(map)
+    .bindPopup(
+      "<strong>START</strong>"
+    );
+
+
+    /* FINISH */
+
+    const finishIcon =
+      L.divIcon(
+        {
+          className:
+            "course-finish",
+
+          iconSize:
+            [18,18]
+        }
+      );
+
+    L.marker(
+      latLngs[
+        latLngs.length - 1
+      ],
+      {
+        icon:finishIcon
+      }
+    )
+    .addTo(map)
+    .bindPopup(
+      "<strong>FINISH</strong>"
+    );
+
+
+    map.fitBounds(
+      course.getBounds(),
+      {
+        padding:
+          [30,30]
+      }
+    );
+
+
+    const courseName =
+      xml
+      .querySelector(
+        "trk > name"
+      )
+      ?.textContent
+      ?.trim()
+      ||
+      "Course";
+
+
+    status.textContent =
+      `${courseName} • ${points.length} course points`;
+
+  }
+
+  catch(error) {
+
+    console.error(
+      "Course map error:",
+      error
+    );
+
+    status.textContent =
+      "Course file not loaded yet";
+
+    map.setView(
+      [37.8,-122.2],
+      9
+    );
+
+  }
+
+}
+
+loadCourse();
+
+
+/* =================================
+   DATA HELPERS
+================================= */
+
+function getValue(
+  object,
+  possibleNames
+) {
+
+  for (
+    const key of possibleNames
+  ) {
+
+    if (
+      object[key] !== undefined &&
+      object[key] !== null &&
+      object[key] !== ""
+    ) {
+
+      return object[key];
+
+    }
+
+  }
+
+  return "";
+
+}
+
+
+function cleanHTML(value) {
+
+  if (
+    value === undefined ||
+    value === null
+  ) {
+    return "";
+  }
+
+  const temp =
+    document.createElement(
+      "div"
+    );
+
+  temp.innerHTML =
+    String(value);
+
+  return (
+    temp.textContent ||
+    temp.innerText ||
+    ""
+  )
+  .trim();
+
+}
+
+
+/* =================================
+   NORMALIZE RACE RESULT FIELDS
+================================= */
+
+function normalizeRunner(
+  runner,
+  index
+) {
+
+  const first =
+    cleanHTML(
+      getValue(
+        runner,
+        [
+          "FirstName",
+          "Firstname",
+          "First"
+        ]
+      )
+    );
+
+  const last =
+    cleanHTML(
+      getValue(
+        runner,
+        [
+          "LastName",
+          "Lastname",
+          "Last"
+        ]
+      )
+    );
+
+  let name =
+    cleanHTML(
+      getValue(
+        runner,
+        [
+          "Name",
+          "FullName",
+          "DisplayName",
+          "Participant"
+        ]
+      )
+    );
+
+  if (!name) {
+
+    name =
+      `${first} ${last}`
+      .trim();
+
+  }
+
+
+  return {
+
+    raw:runner,
+
+    place:
+      cleanHTML(
+        getValue(
+          runner,
+          [
+            "Pl",
+            "Place",
+            "Rank",
+            "OverallPlace",
+            "Overall",
+            "RankM",
+            "RankF"
+          ]
+        )
+      )
+      ||
+      index + 1,
+
+    bib:
+      cleanHTML(
+        getValue(
+          runner,
+          [
+            "Bib",
+            "BibNumber",
+            "StartNo",
+            "StartNumber"
+          ]
+        )
+      ),
+
+    name:
+      name ||
+      "Unknown Runner",
+
+    club:
+      cleanHTML(
+        getValue(
+          runner,
+          [
+            "Club",
+            "Team",
+            "City"
+          ]
+        )
+      ),
+
+    contest:
+      cleanHTML(
+        getValue(
+          runner,
+          [
+            "Contest",
+            "Race",
+            "Competition"
+          ]
+        )
+      ),
+
+    split:
+      cleanHTML(
+        getValue(
+          runner,
+          [
+            "Split",
+            "TimingPoint",
+            "Location",
+            "LastSplit",
+            "ResultAt"
+          ]
+        )
+      ),
+
+    time:
+      cleanHTML(
+        getValue(
+          runner,
+          [
+            "ChipTime",
+            "GunTime",
+            "FinishTime",
+            "Time",
+            "Result"
+          ]
+        )
+      ),
+
+    age:
+      cleanHTML(
+        getValue(
+          runner,
+          [
+            "Age",
+            "AgeGroup"
+          ]
+        )
+      ),
+
+    gender:
+      cleanHTML(
+        getValue(
+          runner,
+          [
+            "Gender",
+            "Sex"
+          ]
+        )
+      )
+
+  };
+
+}
+
+
+/* =================================
+   HTML ROW
+================================= */
+
+function runnerHTML(
+  runner,
+  index = 0
+) {
+
+  const extras =
+    [
+      runner.club,
+      runner.contest,
+      runner.age
+        ? `Age ${runner.age}`
+        : "",
+      runner.gender
+    ]
+    .filter(Boolean)
+    .join(" • ");
+
+
+  return `
+
+    <div class=
+      "runner ${
+        index === 0
+          ? "first"
+          : ""
+      }"
+    >
+
+      <div class="place">
+        ${
+          runner.place
+            ? runner.place
+            : "—"
+        }
+      </div>
+
+      <div class="bib">
+        ${
+          runner.bib
+            ? "#" + runner.bib
+            : "—"
+        }
+      </div>
+
+      <div class="runner-name">
+
+        <div class="name">
+          ${runner.name}
+        </div>
+
+        <div class="meta">
+          ${extras || " "}
+        </div>
+
+      </div>
+
+      <div class="result">
+
+        <div class="split">
+          ${
+            runner.split ||
+            "ON COURSE"
+          }
+        </div>
+
+        <div class="time">
+          ${
+            runner.time ||
+            ""
+          }
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =================================
+   DISPLAY DASHBOARD
+================================= */
+
+function displayRaceData() {
+
+  const runners =
+    raceData.map(
+      normalizeRunner
+    );
+
+
+  document
+    .getElementById(
+      "runnerCount"
+    )
+    .textContent =
+      runners.length;
+
+
+  /* TOP 5 */
+
+  const topFive =
+    runners.slice(
+      0,
+      5
+    );
+
+  document
+    .getElementById(
+      "topFive"
+    )
+    .innerHTML =
+
+      topFive.length
+
+      ? topFive
+          .map(
+            (runner,index) =>
+              runnerHTML(
+                runner,
+                index
+              )
+          )
+          .join("")
+
+      : `
+        <div class="empty">
+          Waiting for leader data…
+        </div>
+      `;
+
+
+  /* LATEST RESULTS */
+
+  const latest =
+    [...runners]
+    .filter(
+      runner =>
+        runner.time ||
+        runner.split
+    )
+    .slice(-12)
+    .reverse();
+
+
+  document
+    .getElementById(
+      "latest"
+    )
+    .innerHTML =
+
+      latest.length
+
+      ? latest
+          .map(
+            runner =>
+              runnerHTML(
+                runner
+              )
+          )
+          .join("")
+
+      : `
+        <div class="empty">
+          Waiting for results…
+        </div>
+      `;
+
+
+  document
+    .getElementById(
+      "latestCount"
+    )
+    .textContent =
+      `${latest.length} RESULTS`;
+
+}
+
+
+/* =================================
+   SEARCH
+================================= */
+
+const searchInput =
+  document.getElementById(
+    "search"
+  );
+
+const searchOverlay =
+  document.getElementById(
+    "searchOverlay"
+  );
+
+const searchResults =
+  document.getElementById(
+    "searchResults"
+  );
+
+
+function searchRunners() {
+
+  const query =
+    searchInput
+      .value
+      .trim()
+      .toLowerCase();
+
+
+  if (!query) {
+
+    searchOverlay
+      .classList
+      .remove(
+        "active"
+      );
+
+    searchResults
+      .innerHTML =
+      "";
+
+    return;
+
+  }
+
+
+  const runners =
+    raceData.map(
+      normalizeRunner
+    );
+
+
+  const matches =
+    runners.filter(
+      runner => {
+
+        const searchable =
+          [
+            runner.name,
+            runner.bib,
+            runner.club,
+            runner.contest,
+            runner.age,
+            runner.gender,
+            runner.split,
+            runner.place
+          ]
+          .join(" ")
+          .toLowerCase();
+
+        return searchable
+          .includes(
+            query
+          );
+
+      }
+    );
+
+
+  searchOverlay
+    .classList
+    .add(
+      "active"
+    );
+
+
+  searchResults
+    .innerHTML =
+
+      matches.length
+
+      ? matches
+          .slice(
+            0,
+            50
+          )
+          .map(
+            runner =>
+              runnerHTML(
+                runner
+              )
+          )
+          .join("")
+
+      : `
+        <div class="empty">
+          No runner found.
+        </div>
+      `;
+
+}
+
+
+searchInput
+  .addEventListener(
+    "input",
+    searchRunners
+  );
+
+
+/* =================================
+   RACE RESULT FETCH
+================================= */
+
+async function updateRaceResults() {
+
+  const status =
+    document.getElementById(
+      "connectionStatus"
+    );
+
+
+  try {
+
+    const response =
+      await fetch(
+        RACE_RESULT_URL,
+        {
+          cache:"no-store"
+        }
+      );
+
+
+    if (!response.ok) {
+
       throw new Error(
         `HTTP ${response.status}`
       );
+
     }
+
 
     const data =
       await response.json();
 
-    if (Array.isArray(data)) {
-      raceData = data;
+
+    if (
+      Array.isArray(data)
+    ) {
+
+      raceData =
+        data;
+
     }
 
-    else if (Array.isArray(data.data)) {
-      raceData = data.data;
+    else if (
+      Array.isArray(
+        data.data
+      )
+    ) {
+
+      raceData =
+        data.data;
+
     }
 
-    else if (Array.isArray(data.results)) {
-      raceData = data.results;
+    else if (
+      Array.isArray(
+        data.results
+      )
+    ) {
+
+      raceData =
+        data.results;
+
     }
 
     else {
-      raceData = [];
+
+      raceData =
+        [];
+
     }
 
-    status.textContent = "CONNECTED";
-    status.className = "status-good";
 
-    document.getElementById("lastUpdate")
+    status.textContent =
+      "CONNECTED";
+
+    status.className =
+      "connected";
+
+
+    document
+      .getElementById(
+        "lastUpdate"
+      )
       .textContent =
-      new Date().toLocaleTimeString();
+        new Date()
+          .toLocaleTimeString(
+            [],
+            {
+              hour:
+                "2-digit",
+              minute:
+                "2-digit",
+              second:
+                "2-digit"
+            }
+          );
+
 
     displayRaceData();
 
@@ -559,23 +1919,32 @@ async function updateRaceResults() {
   catch(error) {
 
     console.error(
-      "RACE RESULT announcer connection error:",
+      "RACE RESULT connection error:",
       error
     );
 
-    status.textContent = "CONNECTION ERROR";
-    status.style.color = "#FF6A3D";
+
+    status.textContent =
+      "CONNECTION ERROR";
+
+    status.className =
+      "error";
+
   }
+
 }
 
-document
-  .getElementById("search")
-  .addEventListener(
-    "input",
-    searchRunners
-  );
+
+/* FIRST LOAD */
 
 updateRaceResults();
+
+
+/* RACE RESULT SIMPLE API
+   cache is approximately
+   10-30 seconds, so 20 sec
+   is appropriate here.
+*/
 
 setInterval(
   updateRaceResults,
