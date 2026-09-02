@@ -272,7 +272,27 @@ header {
 /* =========================
    MAP SIDE
 ========================= */
+.left-column {
+  min-height:0;
+  display:grid;
+  grid-template-rows:minmax(0, 1.35fr) minmax(180px, .65fr);
+  gap:12px;
+}
 
+.youtube-panel {
+  min-height:0;
+  overflow:hidden;
+  border-radius:12px;
+  border:1px solid var(--line);
+  background:#000;
+}
+
+.youtube-panel iframe {
+  width:100%;
+  height:100%;
+  border:0;
+  display:block;
+}
 .map-panel {
   position:relative;
 
@@ -868,7 +888,9 @@ header {
 
 <div class="main">
 
-  <!-- MAP -->
+  <div class="left-column">
+
+    <!-- MAP -->
 
   <section class="map-panel">
 
@@ -902,10 +924,21 @@ header {
 
     </div>
 
-  </section>
+    </section>
+
+    <!-- YOUTUBE LIVE BROADCAST -->
+        <div class="youtube-panel">
+      <iframe
+        id="youtubePlayer"
+        title="Funky Gene Live Broadcast"
+        allow="autoplay; encrypted-media; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    </div>
+
+  </div>
 
   <!-- RIGHT SIDE -->
-
   <div class="right">
 
     <!-- TOP 5 -->
@@ -1007,7 +1040,7 @@ const RACE_RESULT_URL =
 const RACEMAP_ACCESS_URL =
   "http://localhost/_DEMOE/api/T9LA4GO6TA4ZI3MCCEBKKHEABNPTG1LU";
 
-
+const YOUTUBE_VIDEO_ID = "PASTE_VIDEO_ID_HERE";
 /* =================================
    GPX COURSE
 ================================= */
@@ -1018,6 +1051,21 @@ const GPX_URL =
 
 let raceData = [];
 
+
+/* =================================
+   YOUTUBE LIVE BROADCAST
+================================= */
+
+const youtubePlayer =
+  document.getElementById("youtubePlayer");
+
+if (
+  YOUTUBE_VIDEO_ID &&
+  YOUTUBE_VIDEO_ID !== "PASTE_VIDEO_ID_HERE"
+) {
+  youtubePlayer.src =
+    `https://www.youtube.com/embed/${YOUTUBE_VIDEO_ID}?autoplay=0&rel=0`;
+}
 
 /* =================================
    CLOCK
