@@ -449,95 +449,192 @@
 
 </main>
 
-
 <script>
 
 const RACE_RESULT_URL =
   "http://localhost/_DEMOE/api/XC7563EAKS747W72CQJQVDV087HV8VEL";
 
+const RACEMAP_URL =
+  "http://localhost/_DEMOE/api/T9LA4GO6TA4ZI3MCCEBKKHEABNPTG1LU";
+
 const crawl =
   document.getElementById("crawl");
+
+
+function buildRaceMap(rows) {
+
+  const raceByBib = new Map();
+
+  if (!Array.isArray(rows)) {
+    return raceByBib;
+  }
+
+  rows.forEach(row => {
+
+    if (!Array.isArray(row)) {
+      return;
+    }
+
+    // RaceMap Access:
+    // row[1]  = Bib
+    // row[10] = Contest.Name
+
+    const bib = row[1];
+    const race = row[10];
+
+    if (
+      bib !== undefined &&
+      bib !== null &&
+      race
+    ) {
+
+      raceByBib.set(
+        String(bib).trim(),
+        String(race).trim()
+      );
+
+    }
+
+  });
+
+  return raceByBib;
+
+}
 
 
 async function updateRaceResults() {
 
   try {
 
+    /* LIVE RESULTS */
+
     const response =
-      await fetch(RACE_RESULT_URL);
+      await fetch(
+        RACE_RESULT_URL,
+        { cache:"no-store" }
+      );
 
     const runners =
       await response.json();
 
 
+    /* RACE / DISTANCE DATA */
+
+    let raceMapRows = [];
+
+    try {
+
+      const raceResponse =
+        await fetch(
+          RACEMAP_URL,
+          { cache:"no-store" }
+        );
+
+      raceMapRows =
+        await raceResponse.json();
+
+    }
+
+    catch(raceError) {
+
+      console.warn(
+        "RaceMap connection error:",
+        raceError
+      );
+
+    }
+
+
+    const raceByBib =
+      buildRaceMap(raceMapRows);
+
+
     crawl.innerHTML =
+
       runners
       .slice(0, 10)
-      .map((runner, index) => `
+      .map((runner, index) => {
 
-        <div class="item">
+        const bib =
+          String(
+            runner.Bib ?? ""
+          ).trim();
 
-          <span class="tag ${index === 0 ? "leader" : ""}">
+        const raceDistance =
+          raceByBib.get(bib) || "";
+
+
+        return `
+
+          <div class="item">
+
+
+            <span class="tag ${index === 0 ? "leader" : ""}">
+
+              ${
+                index === 0
+                  ? "LEADER"
+                  : runner.Split === "Finish"
+                  ? "FINISHER"
+                  : "SPLIT"
+              }
+
+            </span>
+
+
+            <span class="bib">
+              #${runner.Bib}
+            </span>
+
+
+            <span>
+              ${runner.Name}
+            </span>
+
 
             ${
-              index === 0
-                ? "LEADER"
-                : runner.Split === "Finish"
-                ? "FINISHER"
-                : "SPLIT"
+              raceDistance
+                ? `
+
+                  <span class="separator">
+                    •
+                  </span>
+
+                  <span>
+                    ${raceDistance}
+                  </span>
+
+                `
+                : ""
             }
 
-          </span>
+
+            <span class="separator">
+              •
+            </span>
 
 
-          <span class="bib">
-            #${runner.Bib}
-          </span>
+            <span>
+              ${runner.Split || "ON COURSE"}
+            </span>
 
 
-         <span>
-  ${runner.Name}
-</span>
+            <span class="time">
+
+              ${
+                runner.ChipTime ||
+                runner.GunTime ||
+                ""
+              }
+
+            </span>
 
 
-<span class="separator">
-  •
-</span>
+          </div>
 
+        `;
 
-<span>
-  ${
-    runner.Contest ||
-    runner.Race ||
-    runner.Competition ||
-    runner.Distance ||
-    ""
-  }
-</span>
-
-
-<span class="separator">
-  •
-</span>
-
-
-<span>
-  ${runner.Split || "ON COURSE"}
-</span>
-
-          <span class="time">
-
-            ${
-              runner.ChipTime ||
-              runner.GunTime ||
-              ""
-            }
-
-          </span>
-
-        </div>
-
-      `)
+      })
       .join("");
 
 
@@ -562,7 +659,7 @@ setInterval(
   20000
 );
 
-</script>
+</script></script>
 
 
 </body>
