@@ -1,25 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0">
 
 <title>Funky Gene | Race Announcer</title>
 
-<!-- LEAFLET MAP -->
+<!-- LEAFLET -->
 <link
   rel="stylesheet"
-  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-/>
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
 <script
   src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
 </script>
 
+
 <style>
 
+/* ========================================
+   COLORS
+======================================== */
+
 :root {
+
   --deep-blue:#0B2D4D;
   --ocean:#195E7A;
   --green:#2A7A5E;
@@ -32,19 +40,27 @@
   --panel2:#102b3f;
   --line:#23485f;
   --muted:#94adbd;
+
 }
+
 
 * {
   box-sizing:border-box;
 }
 
+
 html,
 body {
+
   margin:0;
+
   width:100%;
   height:100%;
+
   overflow:hidden;
+
   background:var(--bg);
+
   color:var(--white);
 
   font-family:
@@ -52,14 +68,16 @@ body {
     Arial,
     Helvetica,
     sans-serif;
+
 }
 
 
-/* =========================
-   FULL 16:9 APP
-========================= */
+/* ========================================
+   FULL APP
+======================================== */
 
 .app {
+
   width:100vw;
   height:100vh;
 
@@ -68,17 +86,20 @@ body {
   grid-template-rows:
     76px
     52px
+    48px
     minmax(0,1fr);
 
   overflow:hidden;
+
 }
 
 
-/* =========================
+/* ========================================
    HEADER
-========================= */
+======================================== */
 
 header {
+
   background:
     linear-gradient(
       90deg,
@@ -87,101 +108,157 @@ header {
       var(--ocean)
     );
 
-  border-bottom:4px solid var(--orange);
+  border-bottom:
+    4px solid var(--orange);
 
-  padding:0 24px;
+  padding:
+    0 24px;
 
   display:flex;
+
   align-items:center;
   justify-content:space-between;
+
 }
+
 
 .brand {
+
   display:flex;
+
   align-items:center;
+
   gap:16px;
+
 }
 
+
 .logo-box {
+
   width:47px;
   height:47px;
 
   border-radius:50%;
 
   display:flex;
+
   align-items:center;
   justify-content:center;
 
-  background:var(--orange);
+  background:
+    var(--orange);
 
   color:white;
 
   font-weight:1000;
+
   font-size:20px;
+
 }
+
 
 .title {
+
   font-size:26px;
+
   line-height:1;
+
   font-weight:1000;
+
   letter-spacing:.5px;
+
 }
+
 
 .subtitle {
+
   color:#bfd0da;
+
   font-size:13px;
+
   margin-top:7px;
+
   font-weight:700;
+
   letter-spacing:.7px;
+
 }
+
 
 .header-right {
+
   display:flex;
+
   align-items:center;
+
   gap:16px;
+
 }
+
 
 .clock {
+
   text-align:right;
+
 }
+
 
 .clock-time {
+
   font-size:25px;
+
   font-weight:900;
+
   line-height:1;
+
 }
+
 
 .clock-date {
+
   margin-top:5px;
+
   font-size:11px;
+
   color:#b6c9d4;
+
 }
 
+
 .live {
-  background:var(--yellow);
+
+  background:
+    var(--yellow);
+
   color:#071521;
 
-  padding:10px 15px;
+  padding:
+    10px 15px;
 
   border-radius:7px;
 
   font-weight:1000;
+
   font-size:14px;
+
 }
 
 
-/* =========================
+/* ========================================
    SEARCH / STATUS
-========================= */
+======================================== */
 
 .toolbar {
+
   height:52px;
 
-  padding:7px 16px;
+  padding:
+    7px 16px;
 
   background:#081b29;
 
-  border-bottom:1px solid var(--line);
+  border-bottom:
+    1px solid var(--line);
 
   display:grid;
 
@@ -194,21 +271,30 @@ header {
   gap:16px;
 
   align-items:center;
+
 }
+
 
 .search-wrap {
+
   position:relative;
+
 }
 
+
 .search {
+
   width:100%;
+
   height:36px;
 
-  padding:0 15px 0 38px;
+  padding:
+    0 15px 0 38px;
 
   border-radius:7px;
 
-  border:1px solid #31566e;
+  border:
+    1px solid #31566e;
 
   background:#102738;
 
@@ -217,13 +303,20 @@ header {
   font-size:15px;
 
   outline:none;
+
 }
+
 
 .search:focus {
-  border-color:var(--orange);
+
+  border-color:
+    var(--orange);
+
 }
 
+
 .search-icon {
+
   position:absolute;
 
   left:13px;
@@ -232,9 +325,12 @@ header {
   color:#8ea9b9;
 
   pointer-events:none;
+
 }
 
+
 .stat {
+
   white-space:nowrap;
 
   color:#9fb5c4;
@@ -242,26 +338,144 @@ header {
   font-size:12px;
 
   font-weight:700;
+
 }
+
 
 .stat strong {
+
   color:white;
+
 }
+
 
 .connected {
+
   color:#73e4a4 !important;
+
 }
+
 
 .error {
-  color:var(--orange) !important;
+
+  color:
+    var(--orange) !important;
+
 }
 
 
-/* =========================
+/* ========================================
+   RACE FILTER BAR
+======================================== */
+
+.race-filter-bar {
+
+  height:48px;
+
+  background:#071721;
+
+  border-bottom:
+    1px solid var(--line);
+
+  display:flex;
+
+  align-items:center;
+
+  padding:
+    6px 16px;
+
+  gap:10px;
+
+}
+
+
+.race-filter-label {
+
+  color:#93aebe;
+
+  font-size:11px;
+
+  font-weight:900;
+
+  letter-spacing:.8px;
+
+  margin-right:4px;
+
+}
+
+
+.race-filter {
+
+  height:34px;
+
+  min-width:94px;
+
+  padding:
+    0 16px;
+
+  border-radius:7px;
+
+  border:
+    1px solid #31566e;
+
+  background:#102738;
+
+  color:#bed0da;
+
+  cursor:pointer;
+
+  font-size:12px;
+
+  font-weight:1000;
+
+  letter-spacing:.4px;
+
+  transition:
+    background .15s,
+    border-color .15s,
+    color .15s;
+
+}
+
+
+.race-filter:hover {
+
+  border-color:
+    var(--orange);
+
+  color:white;
+
+}
+
+
+.race-filter.active {
+
+  background:
+    var(--orange);
+
+  border-color:
+    var(--orange);
+
+  color:white;
+
+}
+
+
+.race-filter-count {
+
+  opacity:.75;
+
+  margin-left:4px;
+
+}
+
+
+/* ========================================
    MAIN
-========================= */
+======================================== */
 
 .main {
+
   min-height:0;
 
   padding:12px;
@@ -273,14 +487,16 @@ header {
     minmax(490px,.9fr);
 
   gap:12px;
+
 }
 
 
-/* =========================
-   MAP + YOUTUBE SIDE
-========================= */
+/* ========================================
+   LEFT SIDE
+======================================== */
 
 .left-column {
+
   min-height:0;
 
   display:grid;
@@ -290,12 +506,16 @@ header {
     minmax(180px,.65fr);
 
   gap:12px;
+
 }
 
 
-/* MAP */
+/* ========================================
+   MAP
+======================================== */
 
 .map-panel {
+
   position:relative;
 
   min-height:0;
@@ -304,19 +524,27 @@ header {
 
   border-radius:12px;
 
-  border:1px solid var(--line);
+  border:
+    1px solid var(--line);
 
-  background:var(--panel);
+  background:
+    var(--panel);
+
 }
 
+
 #map {
+
   width:100%;
   height:100%;
 
   background:#0b1d29;
+
 }
 
+
 .map-overlay {
+
   position:absolute;
 
   z-index:500;
@@ -324,31 +552,47 @@ header {
   top:12px;
   left:12px;
 
-  background:rgba(7,21,33,.90);
+  background:
+    rgba(7,21,33,.90);
 
-  border:1px solid #31566e;
+  border:
+    1px solid #31566e;
 
   border-radius:9px;
 
-  padding:10px 13px;
+  padding:
+    10px 13px;
 
-  backdrop-filter:blur(8px);
+  backdrop-filter:
+    blur(8px);
 
   pointer-events:none;
+
 }
+
 
 .map-title {
+
   font-size:15px;
+
   font-weight:1000;
+
 }
+
 
 .map-sub {
+
   font-size:11px;
+
   color:#a8bdc9;
+
   margin-top:4px;
+
 }
 
+
 .map-legend {
+
   position:absolute;
 
   z-index:500;
@@ -356,47 +600,68 @@ header {
   left:12px;
   bottom:12px;
 
-  background:rgba(7,21,33,.92);
+  background:
+    rgba(7,21,33,.92);
 
-  border:1px solid #31566e;
+  border:
+    1px solid #31566e;
 
   border-radius:9px;
 
-  padding:8px 11px;
+  padding:
+    8px 11px;
 
   font-size:11px;
+
 }
+
 
 .legend-row {
+
   display:flex;
+
   align-items:center;
+
   gap:7px;
 
-  margin:3px 0;
+  margin:
+    3px 0;
+
 }
 
+
 .legend-dot {
+
   width:9px;
   height:9px;
 
   border-radius:50%;
 
-  background:var(--orange);
+  background:
+    var(--orange);
+
 }
 
+
 .legend-line {
+
   width:19px;
   height:4px;
 
   border-radius:4px;
 
-  background:var(--orange);
+  background:
+    var(--orange);
+
 }
 
 
-/* YOUTUBE */
+/* ========================================
+   YOUTUBE
+======================================== */
 
 .youtube-panel {
+
   position:relative;
 
   min-height:0;
@@ -405,12 +670,16 @@ header {
 
   border-radius:12px;
 
-  border:1px solid var(--line);
+  border:
+    1px solid var(--line);
 
   background:#000;
+
 }
 
+
 .youtube-panel iframe {
+
   width:100%;
   height:100%;
 
@@ -419,26 +688,28 @@ header {
   display:block;
 
   background:#000;
+
 }
 
+
 .youtube-placeholder {
+
   position:absolute;
 
   inset:0;
 
   display:flex;
 
+  flex-direction:column;
+
   align-items:center;
   justify-content:center;
 
-  padding:20px;
+  gap:6px;
 
   text-align:center;
 
   color:#94adbd;
-
-  font-size:13px;
-  font-weight:700;
 
   background:
     linear-gradient(
@@ -446,19 +717,40 @@ header {
       #071923,
       #0d2233
     );
+
 }
+
+
+.youtube-placeholder strong {
+
+  color:white;
+
+  font-size:14px;
+
+}
+
+
+.youtube-placeholder span {
+
+  font-size:11px;
+
+}
+
 
 .youtube-panel.has-video
 .youtube-placeholder {
+
   display:none;
+
 }
 
 
-/* =========================
-   RIGHT DASHBOARD
-========================= */
+/* ========================================
+   RIGHT SIDE
+======================================== */
 
 .right {
+
   min-height:0;
 
   display:grid;
@@ -468,25 +760,35 @@ header {
     minmax(230px,1fr);
 
   gap:12px;
+
 }
 
+
 .panel {
+
   min-height:0;
 
   display:flex;
+
   flex-direction:column;
 
   overflow:hidden;
 
-  border:1px solid var(--line);
+  border:
+    1px solid var(--line);
 
   border-radius:12px;
 
-  background:var(--panel);
+  background:
+    var(--panel);
+
 }
 
+
 .panel-header {
+
   height:44px;
+
   min-height:44px;
 
   background:
@@ -496,22 +798,33 @@ header {
       #11394f
     );
 
-  padding:0 14px;
+  padding:
+    0 14px;
 
   display:flex;
+
   align-items:center;
   justify-content:space-between;
 
-  border-bottom:2px solid var(--green);
+  border-bottom:
+    2px solid var(--green);
+
 }
+
 
 .panel-title {
+
   font-size:15px;
+
   font-weight:1000;
+
   letter-spacing:.5px;
+
 }
 
+
 .panel-count {
+
   font-size:10px;
 
   color:#a9bdc9;
@@ -520,39 +833,53 @@ header {
 
   border-radius:20px;
 
-  padding:5px 9px;
+  padding:
+    5px 9px;
+
 }
 
+
 .rows {
+
   flex:1;
 
   min-height:0;
 
   overflow-y:auto;
+
   overflow-x:hidden;
+
 }
+
 
 .rows::-webkit-scrollbar,
 .search-results::-webkit-scrollbar {
+
   width:6px;
+
 }
+
 
 .rows::-webkit-scrollbar-thumb,
 .search-results::-webkit-scrollbar-thumb {
+
   background:#31566e;
 
   border-radius:5px;
+
 }
 
 
-/* =========================
-   RUNNER ROWS
-========================= */
+/* ========================================
+   RUNNER ROW
+======================================== */
 
 .runner {
+
   min-height:57px;
 
-  padding:7px 10px;
+  padding:
+    7px 10px;
 
   display:grid;
 
@@ -566,58 +893,89 @@ header {
 
   align-items:center;
 
-  border-bottom:1px solid #1d3b4d;
+  border-bottom:
+    1px solid #1d3b4d;
+
 }
+
 
 .runner:last-child {
+
   border-bottom:none;
+
 }
+
 
 .runner:hover {
+
   background:#123047;
+
 }
 
+
 .place {
+
   font-size:20px;
+
   font-weight:1000;
 
   color:#bcd0dc;
 
   text-align:center;
+
 }
 
+
 .runner.first {
+
   background:
     linear-gradient(
       90deg,
       rgba(255,210,63,.08),
       transparent
     );
+
 }
+
 
 .runner.first .place {
-  color:var(--yellow);
+
+  color:
+    var(--yellow);
+
 }
 
+
 .bib {
+
   text-align:center;
 
-  padding:6px 4px;
+  padding:
+    6px 4px;
 
   border-radius:6px;
 
-  background:var(--ocean);
+  background:
+    var(--ocean);
 
   font-size:12px;
+
   font-weight:900;
+
 }
+
 
 .runner-name {
+
   min-width:0;
+
 }
 
+
 .name {
+
   font-size:14px;
+
   font-weight:1000;
 
   white-space:nowrap;
@@ -625,12 +983,16 @@ header {
   overflow:hidden;
 
   text-overflow:ellipsis;
+
 }
 
+
 .meta {
+
   font-size:10px;
 
-  color:var(--muted);
+  color:
+    var(--muted);
 
   margin-top:4px;
 
@@ -639,15 +1001,31 @@ header {
   overflow:hidden;
 
   text-overflow:ellipsis;
+
 }
 
+
+.contest-tag {
+
+  color:
+    var(--orange);
+
+  font-weight:900;
+
+}
+
+
 .result {
+
   text-align:right;
 
   min-width:0;
+
 }
 
+
 .split {
+
   color:#77dbad;
 
   font-size:10px;
@@ -659,9 +1037,12 @@ header {
   overflow:hidden;
 
   text-overflow:ellipsis;
+
 }
 
+
 .time {
+
   margin-top:3px;
 
   color:white;
@@ -669,89 +1050,16 @@ header {
   font-size:13px;
 
   font-weight:1000;
+
 }
 
 
-/* =========================
-   SEARCH OVERLAY
-========================= */
-
-.search-overlay {
-  display:none;
-
-  position:absolute;
-
-  z-index:1000;
-
-  top:134px;
-  left:16px;
-  right:16px;
-
-  max-height:
-    calc(100vh - 155px);
-
-  background:#091b28;
-
-  border:
-    2px solid
-    var(--orange);
-
-  border-radius:12px;
-
-  box-shadow:
-    0 15px 55px
-    rgba(0,0,0,.55);
-
-  overflow:hidden;
-}
-
-.search-overlay.active {
-  display:block;
-}
-
-.search-header {
-  height:48px;
-
-  background:var(--deep-blue);
-
-  display:flex;
-
-  align-items:center;
-  justify-content:space-between;
-
-  padding:0 16px;
-}
-
-.search-title {
-  font-size:16px;
-
-  font-weight:1000;
-}
-
-.search-help {
-  font-size:11px;
-
-  color:#b9cbd5;
-}
-
-.search-results {
-  overflow-y:auto;
-
-  max-height:
-    calc(100vh - 210px);
-}
-
-.search-results .runner {
-  min-height:64px;
-
-  grid-template-columns:
-    52px
-    72px
-    minmax(0,1fr)
-    130px;
-}
+/* ========================================
+   EMPTY
+======================================== */
 
 .empty {
+
   height:100%;
 
   min-height:90px;
@@ -768,94 +1076,273 @@ header {
   color:#819cac;
 
   font-size:13px;
+
 }
 
 
-/* =========================
+/* ========================================
+   SEARCH RESULTS
+======================================== */
+
+.search-overlay {
+
+  display:none;
+
+  position:absolute;
+
+  z-index:1000;
+
+  top:180px;
+
+  left:16px;
+  right:16px;
+
+  max-height:
+    calc(100vh - 200px);
+
+  background:#091b28;
+
+  border:
+    2px solid var(--orange);
+
+  border-radius:12px;
+
+  box-shadow:
+    0 15px 55px
+    rgba(0,0,0,.55);
+
+  overflow:hidden;
+
+}
+
+
+.search-overlay.active {
+
+  display:block;
+
+}
+
+
+.search-header {
+
+  height:48px;
+
+  background:
+    var(--deep-blue);
+
+  display:flex;
+
+  align-items:center;
+  justify-content:space-between;
+
+  padding:
+    0 16px;
+
+}
+
+
+.search-title {
+
+  font-size:16px;
+
+  font-weight:1000;
+
+}
+
+
+.search-help {
+
+  font-size:11px;
+
+  color:#b9cbd5;
+
+}
+
+
+.search-results {
+
+  overflow-y:auto;
+
+  max-height:
+    calc(100vh - 260px);
+
+}
+
+
+.search-results .runner {
+
+  min-height:64px;
+
+  grid-template-columns:
+    52px
+    72px
+    minmax(0,1fr)
+    130px;
+
+}
+
+
+/* ========================================
    LEAFLET
-========================= */
+======================================== */
 
 .leaflet-control-attribution {
-  font-size:8px !important;
+
+  font-size:
+    8px !important;
+
 }
+
 
 .course-start {
-  background:#2A7A5E;
 
-  border:3px solid white;
+  background:
+    var(--green);
+
+  border:
+    3px solid white;
 
   border-radius:50%;
+
 }
+
 
 .course-finish {
-  background:#FF6A3D;
 
-  border:3px solid white;
+  background:
+    var(--orange);
+
+  border:
+    3px solid white;
 
   border-radius:50%;
+
 }
 
 
-/* =========================
+/* ========================================
    SMALL LAPTOPS
-========================= */
+======================================== */
 
 @media(max-height:800px) {
 
   .app {
+
     grid-template-rows:
       65px
       46px
+      40px
       minmax(0,1fr);
+
   }
+
 
   header {
-    padding:0 18px;
+
+    padding:
+      0 18px;
+
   }
+
 
   .title {
+
     font-size:21px;
+
   }
+
 
   .logo-box {
+
     width:40px;
     height:40px;
+
   }
+
 
   .toolbar {
+
     height:46px;
 
-    padding:5px 12px;
+    padding:
+      5px 12px;
+
   }
 
+
+  .race-filter-bar {
+
+    height:40px;
+
+    padding:
+      4px 12px;
+
+  }
+
+
+  .race-filter {
+
+    height:30px;
+
+    min-width:80px;
+
+  }
+
+
   .main {
+
     padding:8px;
 
     gap:8px;
+
   }
+
 
   .left-column,
   .right {
+
     gap:8px;
+
   }
+
 
   .panel-header {
+
     height:38px;
+
     min-height:38px;
+
   }
+
 
   .runner {
+
     min-height:48px;
 
-    padding:5px 8px;
+    padding:
+      5px 8px;
+
   }
+
 
   .name {
+
     font-size:12px;
+
   }
 
+
   .time {
+
     font-size:11px;
+
+  }
+
+
+  .search-overlay {
+
+    top:151px;
+
   }
 
 }
@@ -867,82 +1354,118 @@ header {
 
 <body>
 
+
 <div class="app">
 
 
-<!-- =========================
+<!-- ========================================
      HEADER
-========================= -->
+======================================== -->
 
 <header>
 
+
   <div class="brand">
 
+
     <div class="logo-box">
+
       FG
+
     </div>
+
 
     <div>
 
+
       <div class="title">
+
         FUNKY GENE RACE COMMAND
+
       </div>
+
 
       <div class="subtitle">
+
         ANNOUNCER • LIVE TIMING • COURSE STATUS
+
       </div>
 
+
     </div>
+
 
   </div>
 
 
   <div class="header-right">
 
+
     <div class="clock">
+
 
       <div
         class="clock-time"
         id="clockTime">
+
         --:--:--
+
       </div>
+
 
       <div
         class="clock-date"
         id="clockDate">
       </div>
 
+
     </div>
 
 
     <div class="live">
+
       ● LIVE
+
     </div>
 
+
   </div>
+
 
 </header>
 
 
-<!-- =========================
+<!-- ========================================
      SEARCH / STATUS
-========================= -->
+======================================== -->
 
 <div class="toolbar">
 
+
   <div class="search-wrap">
 
+
     <span class="search-icon">
+
       ⌕
+
     </span>
 
+
     <input
+
       id="search"
+
       class="search"
+
       type="text"
+
       autocomplete="off"
+
       placeholder="Search bib, runner, club, race, age..."
+
     >
+
 
   </div>
 
@@ -952,7 +1475,9 @@ header {
     RACE RESULT:
 
     <strong id="connectionStatus">
+
       CONNECTING
+
     </strong>
 
   </div>
@@ -963,7 +1488,9 @@ header {
     UPDATED:
 
     <strong id="lastUpdate">
+
       --
+
     </strong>
 
   </div>
@@ -974,17 +1501,105 @@ header {
     RUNNERS:
 
     <strong id="runnerCount">
+
       0
+
     </strong>
 
   </div>
 
+
 </div>
 
 
-<!-- =========================
+<!-- ========================================
+     RACE FILTERS
+======================================== -->
+
+<div class="race-filter-bar">
+
+
+  <div class="race-filter-label">
+
+    RACE:
+
+  </div>
+
+
+  <button
+    class="race-filter active"
+    data-race="ALL">
+
+    ALL
+
+    <span
+      class="race-filter-count"
+      id="countALL">
+
+      0
+
+    </span>
+
+  </button>
+
+
+  <button
+    class="race-filter"
+    data-race="100K">
+
+    100K
+
+    <span
+      class="race-filter-count"
+      id="count100K">
+
+      0
+
+    </span>
+
+  </button>
+
+
+  <button
+    class="race-filter"
+    data-race="50K">
+
+    50K
+
+    <span
+      class="race-filter-count"
+      id="count50K">
+
+      0
+
+    </span>
+
+  </button>
+
+
+  <button
+    class="race-filter"
+    data-race="MARATHON">
+
+    MARATHON
+
+    <span
+      class="race-filter-count"
+      id="countMARATHON">
+
+      0
+
+    </span>
+
+  </button>
+
+
+</div>
+
+
+<!-- ========================================
      MAIN
-========================= -->
+======================================== -->
 
 <div class="main">
 
@@ -998,14 +1613,19 @@ header {
 
     <section class="map-panel">
 
+
       <div id="map"></div>
 
 
       <div class="map-overlay">
 
+
         <div class="map-title">
+
           COURSE MAP
+
         </div>
+
 
         <div
           class="map-sub"
@@ -1015,10 +1635,12 @@ header {
 
         </div>
 
+
       </div>
 
 
       <div class="map-legend">
+
 
         <div class="legend-row">
 
@@ -1037,7 +1659,9 @@ header {
 
         </div>
 
+
       </div>
+
 
     </section>
 
@@ -1050,10 +1674,19 @@ header {
 
 
       <iframe
+
         id="youtubePlayer"
+
         title="Funky Gene Live Broadcast"
-        allow="autoplay; encrypted-media; picture-in-picture"
+
+        allow="
+          autoplay;
+          encrypted-media;
+          picture-in-picture
+        "
+
         allowfullscreen>
+
       </iframe>
 
 
@@ -1061,9 +1694,20 @@ header {
         class="youtube-placeholder"
         id="youtubePlaceholder">
 
-        YOUTUBE LIVE BROADCAST
-        <br>
-        Paste the race-day YouTube link in the code.
+
+        <strong>
+
+          YOUTUBE LIVE BROADCAST
+
+        </strong>
+
+
+        <span>
+
+          Paste the race-day YouTube link in the code
+
+        </span>
+
 
       </div>
 
@@ -1083,15 +1727,25 @@ header {
 
     <section class="panel">
 
+
       <div class="panel-header">
 
-        <div class="panel-title">
-          ★ TOP 5
+
+        <div
+          class="panel-title"
+          id="topFiveTitle">
+
+          ★ TOP 5 • ALL
+
         </div>
 
+
         <div class="panel-count">
+
           LIVE LEADERS
+
         </div>
+
 
       </div>
 
@@ -1101,6 +1755,7 @@ header {
         id="topFive">
       </div>
 
+
     </section>
 
 
@@ -1108,11 +1763,18 @@ header {
 
     <section class="panel">
 
+
       <div class="panel-header">
 
-        <div class="panel-title">
-          LATEST RESULTS
+
+        <div
+          class="panel-title"
+          id="latestTitle">
+
+          LATEST RESULTS • ALL
+
         </div>
+
 
         <div
           class="panel-count"
@@ -1122,6 +1784,7 @@ header {
 
         </div>
 
+
       </div>
 
 
@@ -1130,19 +1793,22 @@ header {
         id="latest">
       </div>
 
+
     </section>
 
 
   </div>
 
-</div>
 
 </div>
 
 
-<!-- =========================
+</div>
+
+
+<!-- ========================================
      SEARCH OVERLAY
-========================= -->
+======================================== -->
 
 <div
   id="searchOverlay"
@@ -1151,13 +1817,22 @@ header {
 
   <div class="search-header">
 
-    <div class="search-title">
+
+    <div
+      class="search-title"
+      id="searchTitle">
+
       RUNNER SEARCH
+
     </div>
 
+
     <div class="search-help">
+
       Clear search box to close
+
     </div>
+
 
   </div>
 
@@ -1171,60 +1846,68 @@ header {
 </div>
 
 
+
 <script>
 
 
-/* =========================
+/* ========================================
    RACE RESULT
-========================= */
+======================================== */
 
 const RACE_RESULT_URL =
+
   "http://localhost/_DEMOE/api/XP7OBROL70L60QAVZX5US6I0UQ7EQYXY";
 
 
-/* =========================
-   RACEMAP PARTICIPANT FEED
-========================= */
+/* ========================================
+   RACEMAP
+======================================== */
 
 const RACEMAP_ACCESS_URL =
+
   "http://localhost/_DEMOE/api/T9LA4GO6TA4ZI3MCCEBKKHEABNPTG1LU";
 
 
-/* =========================
-   YOUTUBE LIVE
+/* ========================================
+   YOUTUBE
 
    ON RACE DAY:
 
-   Replace the text below with
-   your YouTube live link.
-
-   Example:
-
-   https://www.youtube.com/watch?v=ABC123
-========================= */
+   Replace PASTE_YOUTUBE_LINK_HERE
+   with the live YouTube URL.
+======================================== */
 
 const YOUTUBE_VIDEO =
+
   "PASTE_YOUTUBE_LINK_HERE";
 
 
-/* =========================
-   GPX COURSE
-========================= */
+/* ========================================
+   GPX
+======================================== */
 
 const GPX_URL =
+
   "./NEWMARATHON.gpx";
 
 
 let raceData = [];
 
 
-/* =========================
+let activeRace =
+
+  "ALL";
+
+
+/* ========================================
    CLOCK
-========================= */
+======================================== */
 
 function updateClock() {
 
+
   const now =
+
     new Date();
 
 
@@ -1233,13 +1916,24 @@ function updateClock() {
       "clockTime"
     )
     .textContent =
+
       now.toLocaleTimeString(
+
         [],
+
         {
-          hour:"2-digit",
-          minute:"2-digit",
-          second:"2-digit"
+
+          hour:
+            "2-digit",
+
+          minute:
+            "2-digit",
+
+          second:
+            "2-digit"
+
         }
+
       );
 
 
@@ -1248,14 +1942,26 @@ function updateClock() {
       "clockDate"
     )
     .textContent =
+
       now.toLocaleDateString(
+
         [],
+
         {
-          weekday:"short",
-          month:"short",
-          day:"numeric"
+
+          weekday:
+            "short",
+
+          month:
+            "short",
+
+          day:
+            "numeric"
+
         }
+
       );
+
 
 }
 
@@ -1264,18 +1970,23 @@ updateClock();
 
 
 setInterval(
+
   updateClock,
+
   1000
+
 );
 
 
-/* =========================
+/* ========================================
    YOUTUBE
-========================= */
+======================================== */
 
 function getYouTubeVideoId(value) {
 
+
   const input =
+
     String(
       value || ""
     )
@@ -1283,9 +1994,14 @@ function getYouTubeVideoId(value) {
 
 
   if (
-    !input ||
+
+    !input
+
+    ||
+
     input ===
       "PASTE_YOUTUBE_LINK_HERE"
+
   ) {
 
     return "";
@@ -1293,11 +2009,14 @@ function getYouTubeVideoId(value) {
   }
 
 
-  /* VIDEO ID ONLY */
-
   if (
-    !input.includes("/") &&
+
+    !input.includes("/")
+
+    &&
+
     !input.includes("?")
+
   ) {
 
     return input;
@@ -1307,31 +2026,36 @@ function getYouTubeVideoId(value) {
 
   try {
 
+
     const url =
+
       new URL(input);
 
 
-    /* youtu.be/VIDEOID */
-
     if (
+
       url.hostname.includes(
         "youtu.be"
       )
+
     ) {
 
+
       return url.pathname
+
         .replace(
           /^\/+/,
           ""
         )
+
         .split("/")[0];
+
 
     }
 
 
-    /* youtube.com/watch?v=VIDEOID */
-
     const watchID =
+
       url.searchParams.get(
         "v"
       );
@@ -1344,17 +2068,17 @@ function getYouTubeVideoId(value) {
     }
 
 
-    /* youtube.com/live/VIDEOID
-       youtube.com/embed/VIDEOID
-       youtube.com/shorts/VIDEOID */
-
     const parts =
+
       url.pathname
+
         .split("/")
+
         .filter(Boolean);
 
 
     const markers =
+
       [
         "live",
         "embed",
@@ -1363,15 +2087,22 @@ function getYouTubeVideoId(value) {
 
 
     for (
+
       let i = 0;
+
       i < parts.length - 1;
+
       i++
+
     ) {
 
+
       if (
+
         markers.includes(
           parts[i]
         )
+
       ) {
 
         return parts[
@@ -1380,16 +2111,24 @@ function getYouTubeVideoId(value) {
 
       }
 
+
     }
+
 
   }
 
+
   catch(error) {
 
+
     console.warn(
+
       "YouTube URL error:",
+
       error
+
     );
+
 
   }
 
@@ -1401,31 +2140,30 @@ function getYouTubeVideoId(value) {
 
 function loadYouTubePlayer() {
 
+
   const panel =
+
     document.getElementById(
       "youtubePanel"
     );
 
 
   const player =
+
     document.getElementById(
       "youtubePlayer"
     );
 
 
-  const placeholder =
-    document.getElementById(
-      "youtubePlaceholder"
-    );
-
-
   const videoId =
+
     getYouTubeVideoId(
       YOUTUBE_VIDEO
     );
 
 
   if (!videoId) {
+
 
     player.removeAttribute(
       "src"
@@ -1439,22 +2177,24 @@ function loadYouTubePlayer() {
       );
 
 
-    placeholder.innerHTML =
-      "YOUTUBE LIVE BROADCAST<br>Paste the race-day YouTube link in the code.";
-
-
     return;
+
 
   }
 
 
   player.src =
+
     "https://www.youtube.com/embed/"
+
     +
+
     encodeURIComponent(
       videoId
     )
+
     +
+
     "?rel=0";
 
 
@@ -1464,44 +2204,59 @@ function loadYouTubePlayer() {
       "has-video"
     );
 
+
 }
 
 
 loadYouTubePlayer();
 
 
-/* =========================
+/* ========================================
    MAP
-========================= */
+======================================== */
 
 const map =
+
   L.map(
+
     "map",
+
     {
+
       zoomControl:true
+
     }
+
   );
 
 
 L.tileLayer(
+
   "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+
   {
+
     maxZoom:19,
 
     attribution:
       "&copy; OpenStreetMap"
+
   }
+
 )
+
 .addTo(map);
 
 
-/* =========================
-   LOAD GPX COURSE
-========================= */
+/* ========================================
+   GPX COURSE
+======================================== */
 
 async function loadCourse() {
 
+
   const status =
+
     document.getElementById(
       "mapStatus"
     );
@@ -1509,189 +2264,287 @@ async function loadCourse() {
 
   try {
 
+
     const response =
+
       await fetch(
+
         GPX_URL,
+
         {
-          cache:"no-store"
+
+          cache:
+            "no-store"
+
         }
+
       );
 
 
     if (!response.ok) {
 
+
       throw new Error(
         "GPX not found"
       );
+
 
     }
 
 
     const text =
+
       await response.text();
 
 
     const parser =
+
       new DOMParser();
 
 
     const xml =
+
       parser.parseFromString(
+
         text,
+
         "application/xml"
+
       );
 
 
     const points =
+
       [
+
         ...xml.querySelectorAll(
           "trkpt"
         )
+
       ];
 
 
     if (!points.length) {
 
+
       throw new Error(
         "No GPX track points"
       );
+
 
     }
 
 
     const latLngs =
+
       points.map(
+
         point => [
 
           Number(
+
             point.getAttribute(
               "lat"
             )
+
           ),
 
           Number(
+
             point.getAttribute(
               "lon"
             )
+
           )
 
         ]
+
       );
 
 
     const course =
+
       L.polyline(
+
         latLngs,
+
         {
-          color:"#FF6A3D",
 
-          weight:5,
+          color:
+            "#FF6A3D",
 
-          opacity:.95
+          weight:
+            5,
+
+          opacity:
+            .95
+
         }
+
       )
+
       .addTo(map);
 
 
     const startIcon =
+
       L.divIcon(
+
         {
+
           className:
             "course-start",
 
           iconSize:
             [18,18]
+
         }
+
       );
 
 
     const finishIcon =
+
       L.divIcon(
+
         {
+
           className:
             "course-finish",
 
           iconSize:
             [18,18]
+
         }
+
       );
 
 
     L.marker(
+
       latLngs[0],
+
       {
-        icon:startIcon
+
+        icon:
+          startIcon
+
       }
+
     )
+
     .addTo(map)
+
     .bindPopup(
+
       "<strong>START</strong>"
+
     );
 
 
     L.marker(
+
       latLngs[
         latLngs.length - 1
       ],
+
       {
-        icon:finishIcon
+
+        icon:
+          finishIcon
+
       }
+
     )
+
     .addTo(map)
+
     .bindPopup(
+
       "<strong>FINISH</strong>"
+
     );
 
 
     map.fitBounds(
+
       course.getBounds(),
+
       {
+
         padding:
           [30,30]
+
       }
+
     );
 
 
     const courseName =
+
       xml
+
         .querySelector(
           "trk > name"
         )
+
         ?.textContent
+
         ?.trim()
+
       ||
+
       "Course";
 
 
     status.textContent =
+
       courseName
+
       +
+
       " • "
+
       +
+
       points.length
+
       +
+
       " course points";
+
 
   }
 
+
   catch(error) {
 
+
     console.error(
+
       "Course map error:",
+
       error
+
     );
 
 
     status.textContent =
+
       "Course file not loaded yet";
 
 
     map.setView(
+
       [37.8,-122.2],
+
       9
+
     );
 
+
   }
+
 
 }
 
@@ -1699,28 +2552,46 @@ async function loadCourse() {
 loadCourse();
 
 
-/* =========================
+/* ========================================
    DATA HELPERS
-========================= */
+======================================== */
 
 function getValue(
+
   object,
+
   possibleNames
+
 ) {
 
+
   for (
+
     const key of possibleNames
+
   ) {
 
+
     if (
-      object[key] !== undefined &&
-      object[key] !== null &&
+
+      object[key] !== undefined
+
+      &&
+
+      object[key] !== null
+
+      &&
+
       object[key] !== ""
+
     ) {
+
 
       return object[key];
 
+
     }
+
 
   }
 
@@ -1732,88 +2603,145 @@ function getValue(
 
 function cleanHTML(value) {
 
+
   if (
-    value === undefined ||
+
+    value === undefined
+
+    ||
+
     value === null
+
   ) {
 
+
     return "";
+
 
   }
 
 
   const temp =
+
     document.createElement(
       "div"
     );
 
 
   temp.innerHTML =
+
     String(value);
 
 
   return (
-    temp.textContent ||
-    temp.innerText ||
+
+    temp.textContent
+
+    ||
+
+    temp.innerText
+
+    ||
+
     ""
+
   )
+
   .trim();
+
 
 }
 
 
-/* =========================
+/* ========================================
    NORMALIZE RACE RESULT
-========================= */
+======================================== */
 
 function normalizeRunner(
+
   runner,
+
   index
+
 ) {
 
+
   const first =
+
     cleanHTML(
+
       getValue(
+
         runner,
+
         [
+
           "FirstName",
+
           "Firstname",
+
           "First"
+
         ]
+
       )
+
     );
 
 
   const last =
+
     cleanHTML(
+
       getValue(
+
         runner,
+
         [
+
           "LastName",
+
           "Lastname",
+
           "Last"
+
         ]
+
       )
+
     );
 
 
   let name =
+
     cleanHTML(
+
       getValue(
+
         runner,
+
         [
+
           "Name",
+
           "FullName",
+
           "DisplayName",
+
           "Participant"
+
         ]
+
       )
+
     );
 
 
   if (!name) {
 
+
     name =
+
       (
         first
         +
@@ -1821,163 +2749,558 @@ function normalizeRunner(
         +
         last
       )
+
       .trim();
+
 
   }
 
 
   return {
 
-    raw:runner,
+
+    raw:
+      runner,
 
 
     place:
+
       cleanHTML(
+
         getValue(
+
           runner,
+
           [
+
             "Pl",
+
             "Place",
+
             "Rank",
+
             "OverallPlace",
+
             "Overall",
+
             "RankM",
+
             "RankF"
+
           ]
+
         )
+
       )
+
       ||
+
       index + 1,
 
 
     bib:
+
       cleanHTML(
+
         getValue(
+
           runner,
+
           [
+
             "Bib",
+
             "BibNumber",
+
             "StartNo",
+
             "StartNumber"
+
           ]
+
         )
+
       ),
 
 
     name:
-      name ||
+
+      name
+
+      ||
+
       "Unknown Runner",
 
 
     club:
+
       cleanHTML(
+
         getValue(
+
           runner,
+
           [
+
             "Club",
+
             "Team",
+
             "City"
+
           ]
+
         )
+
       ),
 
 
     contest:
+
       cleanHTML(
+
         getValue(
+
           runner,
+
           [
+
             "Contest",
+
             "Race",
+
             "Competition"
+
           ]
+
         )
+
       ),
 
 
     split:
+
       cleanHTML(
+
         getValue(
+
           runner,
+
           [
+
             "Split",
+
             "TimingPoint",
+
             "Location",
+
             "LastSplit",
+
             "ResultAt"
+
           ]
+
         )
+
       ),
 
 
     time:
+
       cleanHTML(
+
         getValue(
+
           runner,
+
           [
+
             "ChipTime",
+
             "GunTime",
+
             "FinishTime",
+
             "Time",
+
             "Result"
+
           ]
+
         )
+
       ),
 
 
     age:
+
       cleanHTML(
+
         getValue(
+
           runner,
+
           [
+
             "Age",
+
             "AgeGroup"
+
           ]
+
         )
+
       ),
 
 
     gender:
+
       cleanHTML(
+
         getValue(
+
           runner,
+
           [
+
             "Gender",
+
             "Sex"
+
           ]
+
         )
+
       )
 
+
   };
+
 
 }
 
 
-/* =========================
-   RUNNER HTML
-========================= */
+/* ========================================
+   RACE MATCHING
 
-function runnerHTML(
-  runner,
-  index = 0
+   Handles things such as:
+
+   100K
+   100 km
+   100 Kilometer
+
+   50K
+   50 km
+
+   Marathon
+======================================== */
+
+function contestMatches(
+
+  contest,
+
+  race
+
 ) {
 
-  const extras =
+
+  if (race === "ALL") {
+
+    return true;
+
+  }
+
+
+  const text =
+
+    String(
+      contest || ""
+    )
+
+    .toLowerCase()
+
+    .replace(
+      /kilometres?/g,
+      "km"
+    )
+
+    .replace(
+      /kilometers?/g,
+      "km"
+    )
+
+    .replace(
+      /\s+/g,
+      ""
+    )
+
+    .replace(
+      /-/g,
+      ""
+    );
+
+
+  if (race === "100K") {
+
+
+    return (
+
+      text.includes(
+        "100k"
+      )
+
+      ||
+
+      text.includes(
+        "100km"
+      )
+
+    );
+
+
+  }
+
+
+  if (race === "50K") {
+
+
+    return (
+
+      !text.includes(
+        "100k"
+      )
+
+      &&
+
+      !text.includes(
+        "100km"
+      )
+
+      &&
+
+      (
+
+        text.includes(
+          "50k"
+        )
+
+        ||
+
+        text.includes(
+          "50km"
+        )
+
+      )
+
+    );
+
+
+  }
+
+
+  if (race === "MARATHON") {
+
+
+    return (
+
+      text.includes(
+        "marathon"
+      )
+
+      &&
+
+      !text.includes(
+        "halfmarathon"
+      )
+
+    );
+
+
+  }
+
+
+  return false;
+
+
+}
+
+
+/* ========================================
+   FILTER CURRENT RUNNERS
+======================================== */
+
+function getFilteredRunners() {
+
+
+  const runners =
+
+    raceData.map(
+      normalizeRunner
+    );
+
+
+  if (
+    activeRace === "ALL"
+  ) {
+
+
+    return runners;
+
+
+  }
+
+
+  return runners.filter(
+
+    runner =>
+
+      contestMatches(
+
+        runner.contest,
+
+        activeRace
+
+      )
+
+  );
+
+
+}
+
+
+/* ========================================
+   FILTER COUNTS
+======================================== */
+
+function updateRaceCounts() {
+
+
+  const runners =
+
+    raceData.map(
+      normalizeRunner
+    );
+
+
+  document
+    .getElementById(
+      "countALL"
+    )
+    .textContent =
+
+      runners.length;
+
+
+  document
+    .getElementById(
+      "count100K"
+    )
+    .textContent =
+
+      runners.filter(
+
+        runner =>
+
+          contestMatches(
+            runner.contest,
+            "100K"
+          )
+
+      ).length;
+
+
+  document
+    .getElementById(
+      "count50K"
+    )
+    .textContent =
+
+      runners.filter(
+
+        runner =>
+
+          contestMatches(
+            runner.contest,
+            "50K"
+          )
+
+      ).length;
+
+
+  document
+    .getElementById(
+      "countMARATHON"
+    )
+    .textContent =
+
+      runners.filter(
+
+        runner =>
+
+          contestMatches(
+            runner.contest,
+            "MARATHON"
+          )
+
+      ).length;
+
+
+}
+
+
+/* ========================================
+   RUNNER HTML
+======================================== */
+
+function runnerHTML(
+
+  runner,
+
+  index = 0
+
+) {
+
+
+  const extraInfo =
+
     [
+
+      runner.contest
+
+        ?
+
+        `<span class="contest-tag">${runner.contest}</span>`
+
+        :
+
+        "",
+
+
       runner.club,
-      runner.contest,
+
 
       runner.age
-        ? "Age " + runner.age
-        : "",
+
+        ?
+
+        "Age " + runner.age
+
+        :
+
+        "",
+
 
       runner.gender
+
     ]
+
     .filter(Boolean)
+
     .join(" • ");
 
 
   return `
+
 
     <div class="runner ${
       index === 0
@@ -1985,12 +3308,10 @@ function runnerHTML(
         : ""
     }">
 
+
       <div class="place">
 
-        ${
-          runner.place ||
-          "—"
-        }
+        ${runner.place || "—"}
 
       </div>
 
@@ -2008,6 +3329,7 @@ function runnerHTML(
 
       <div class="runner-name">
 
+
         <div class="name">
 
           ${runner.name}
@@ -2017,19 +3339,22 @@ function runnerHTML(
 
         <div class="meta">
 
-          ${extras || " "}
+          ${extraInfo || " "}
 
         </div>
+
 
       </div>
 
 
       <div class="result">
 
+
         <div class="split">
 
           ${
-            runner.split ||
+            runner.split
+            ||
             "ON COURSE"
           }
 
@@ -2038,32 +3363,33 @@ function runnerHTML(
 
         <div class="time">
 
-          ${
-            runner.time ||
-            ""
-          }
+          ${runner.time || ""}
 
         </div>
 
+
       </div>
+
 
     </div>
 
+
   `;
+
 
 }
 
 
-/* =========================
+/* ========================================
    DISPLAY DASHBOARD
-========================= */
+======================================== */
 
 function displayRaceData() {
 
+
   const runners =
-    raceData.map(
-      normalizeRunner
-    );
+
+    getFilteredRunners();
 
 
   document
@@ -2071,12 +3397,40 @@ function displayRaceData() {
       "runnerCount"
     )
     .textContent =
+
       runners.length;
 
 
-  /* TOP 5 */
+  document
+    .getElementById(
+      "topFiveTitle"
+    )
+    .textContent =
+
+      "★ TOP 5 • "
+
+      +
+
+      activeRace;
+
+
+  document
+    .getElementById(
+      "latestTitle"
+    )
+    .textContent =
+
+      "LATEST RESULTS • "
+
+      +
+
+      activeRace;
+
+
+  /* TOP FIVE */
 
   const topFive =
+
     runners.slice(
       0,
       5
@@ -2089,38 +3443,59 @@ function displayRaceData() {
     )
     .innerHTML =
 
+
       topFive.length
+
 
       ?
 
+
       topFive
+
         .map(
+
           (runner,index) =>
+
             runnerHTML(
               runner,
               index
             )
+
         )
+
         .join("")
+
 
       :
 
+
       `
+
       <div class="empty">
-        Waiting for leader data…
+
+        No runners in ${activeRace}
+
       </div>
+
       `;
 
 
-  /* LATEST RESULTS */
+  /* LATEST */
 
   const latest =
+
     [...runners]
 
       .filter(
+
         runner =>
-          runner.time ||
+
+          runner.time
+
+          ||
+
           runner.split
+
       )
 
       .slice(-12)
@@ -2134,25 +3509,39 @@ function displayRaceData() {
     )
     .innerHTML =
 
+
       latest.length
+
 
       ?
 
+
       latest
+
         .map(
+
           runner =>
+
             runnerHTML(
               runner
             )
+
         )
+
         .join("")
+
 
       :
 
+
       `
+
       <div class="empty">
-        Waiting for results…
+
+        No results in ${activeRace}
+
       </div>
+
       `;
 
 
@@ -2161,30 +3550,102 @@ function displayRaceData() {
       "latestCount"
     )
     .textContent =
+
       latest.length
+
       +
+
       " RESULTS";
+
 
 }
 
 
-/* =========================
+/* ========================================
+   RACE BUTTONS
+======================================== */
+
+document
+
+  .querySelectorAll(
+    ".race-filter"
+  )
+
+  .forEach(
+
+    button => {
+
+
+      button.addEventListener(
+
+        "click",
+
+        () => {
+
+
+          activeRace =
+
+            button.dataset.race;
+
+
+          document
+
+            .querySelectorAll(
+              ".race-filter"
+            )
+
+            .forEach(
+
+              other =>
+
+                other.classList.remove(
+                  "active"
+                )
+
+            );
+
+
+          button.classList.add(
+            "active"
+          );
+
+
+          displayRaceData();
+
+
+          searchRunners();
+
+
+        }
+
+      );
+
+
+    }
+
+  );
+
+
+/* ========================================
    SEARCH
-========================= */
+======================================== */
 
 const searchInput =
+
   document.getElementById(
     "search"
   );
 
 
 const searchOverlay =
+
   document.getElementById(
     "searchOverlay"
   );
 
 
 const searchResults =
+
   document.getElementById(
     "searchResults"
   );
@@ -2192,118 +3653,178 @@ const searchResults =
 
 function searchRunners() {
 
+
   const query =
+
     searchInput
+
       .value
+
       .trim()
+
       .toLowerCase();
 
 
   if (!query) {
 
+
     searchOverlay
+
       .classList
+
       .remove(
         "active"
       );
 
 
-    searchResults
-      .innerHTML =
+    searchResults.innerHTML =
+
       "";
 
 
     return;
 
+
   }
 
 
   const runners =
-    raceData.map(
-      normalizeRunner
-    );
+
+    getFilteredRunners();
 
 
   const matches =
+
     runners.filter(
+
       runner => {
 
+
         const searchable =
+
           [
+
             runner.name,
+
             runner.bib,
+
             runner.club,
+
             runner.contest,
+
             runner.age,
+
             runner.gender,
+
             runner.split,
+
             runner.place
+
           ]
+
           .join(" ")
+
           .toLowerCase();
 
 
-        return searchable
-          .includes(
-            query
-          );
+        return searchable.includes(
+          query
+        );
+
 
       }
+
     );
 
 
   searchOverlay
+
     .classList
+
     .add(
       "active"
     );
 
 
-  searchResults
-    .innerHTML =
+  document
+    .getElementById(
+      "searchTitle"
+    )
+    .textContent =
 
-      matches.length
+      "RUNNER SEARCH • "
 
-      ?
+      +
 
-      matches
-        .slice(
-          0,
-          50
-        )
-        .map(
-          runner =>
-            runnerHTML(
-              runner
-            )
-        )
-        .join("")
+      activeRace;
 
-      :
 
-      `
-      <div class="empty">
-        No runner found.
-      </div>
-      `;
+  searchResults.innerHTML =
+
+
+    matches.length
+
+
+    ?
+
+
+    matches
+
+      .slice(
+        0,
+        50
+      )
+
+      .map(
+
+        runner =>
+
+          runnerHTML(
+            runner
+          )
+
+      )
+
+      .join("")
+
+
+    :
+
+
+    `
+
+    <div class="empty">
+
+      No runner found in ${activeRace}.
+
+    </div>
+
+    `;
+
 
 }
 
 
 searchInput
+
   .addEventListener(
+
     "input",
+
     searchRunners
+
   );
 
 
-/* =========================
+/* ========================================
    RACE RESULT FETCH
-========================= */
+======================================== */
 
 async function updateRaceResults() {
 
+
   const status =
+
     document.getElementById(
       "connectionStatus"
     );
@@ -2311,27 +3832,42 @@ async function updateRaceResults() {
 
   try {
 
+
     const response =
+
       await fetch(
+
         RACE_RESULT_URL,
+
         {
-          cache:"no-store"
+
+          cache:
+            "no-store"
+
         }
+
       );
 
 
     if (!response.ok) {
 
+
       throw new Error(
+
         "HTTP "
+
         +
+
         response.status
+
       );
+
 
     }
 
 
     const data =
+
       await response.json();
 
 
@@ -2339,46 +3875,67 @@ async function updateRaceResults() {
       Array.isArray(data)
     ) {
 
+
       raceData =
+
         data;
+
 
     }
 
+
     else if (
+
       Array.isArray(
         data.data
       )
+
     ) {
 
+
       raceData =
+
         data.data;
+
 
     }
 
+
     else if (
+
       Array.isArray(
         data.results
       )
+
     ) {
 
+
       raceData =
+
         data.results;
+
 
     }
 
+
     else {
 
+
       raceData =
+
         [];
+
 
     }
 
 
     status.textContent =
+
       "CONNECTED";
 
 
     status.className =
+
       "connected";
 
 
@@ -2387,39 +3944,65 @@ async function updateRaceResults() {
         "lastUpdate"
       )
       .textContent =
+
         new Date()
+
           .toLocaleTimeString(
+
             [],
+
             {
-              hour:"2-digit",
-              minute:"2-digit",
-              second:"2-digit"
+
+              hour:
+                "2-digit",
+
+              minute:
+                "2-digit",
+
+              second:
+                "2-digit"
+
             }
+
           );
+
+
+    updateRaceCounts();
 
 
     displayRaceData();
 
+
     searchRunners();
+
 
   }
 
+
   catch(error) {
 
+
     console.error(
+
       "RACE RESULT connection error:",
+
       error
+
     );
 
 
     status.textContent =
+
       "CONNECTION ERROR";
 
 
     status.className =
+
       "error";
 
+
   }
+
 
 }
 
@@ -2429,15 +4012,20 @@ async function updateRaceResults() {
 updateRaceResults();
 
 
-/* UPDATE EVERY 20 SECONDS */
+/* REFRESH EVERY 20 SECONDS */
 
 setInterval(
+
   updateRaceResults,
+
   20000
+
 );
 
 
 </script>
 
+
 </body>
+
 </html>
