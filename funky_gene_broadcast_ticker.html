@@ -251,21 +251,44 @@
       </div>
     </section>
   </main>
-<script src="fake_race_result_data.js"></script>
-  <script>
-const crawl = document.getElementById("crawl");
-const runners = window.FAKE_RACE_RESULT_DATA.runners;
+<script>
+const RACE_RESULT_URL =
+  "http://localhost/_DEMOE/api/XC7563EAKS747W72CQJQVDV087HV8VEL";
 
-crawl.innerHTML = runners.map((runner, index) => `
-  <div class="item">
-    <span class="tag ${index === 0 ? "leader" : ""}">${index === 0 ? "LEADER" : "SPLIT"}</span>
-    <span class="bib">#${runner.bib}</span>
-    <span>${runner.name}</span>
-    <span class="separator">•</span>
-    <span>${runner.split}</span>
-    <span class="time">${runner.time}</span>
-  </div>
-`).join("");
+const crawl = document.getElementById("crawl");
+
+async function updateRaceResults() {
+  try {
+    const response = await fetch(RACE_RESULT_URL);
+    const runners = await response.json();
+
+    crawl.innerHTML = runners.slice(0, 10).map((runner, index) => `
+      <div class="item">
+        <span class="tag ${index === 0 ? "leader" : ""}">
+          ${index === 0 ? "LEADER" : runner.Split === "Finish" ? "FINISHER" : "SPLIT"}
+        </span>
+
+        <span class="bib">#${runner.Bib}</span>
+
+        <span>${runner.Name}</span>
+
+        <span class="separator">•</span>
+
+        <span>${runner.Split || "ON COURSE"}</span>
+
+        <span class="time">
+          ${runner.ChipTime || runner.GunTime || ""}
+        </span>
+      </div>
+    `).join("");
+
+  } catch (error) {
+    console.error("RACE RESULT connection error:", error);
+  }
+}
+
+updateRaceResults();
+setInterval(updateRaceResults, 20000);
 </script>
 </body>
 </html>
