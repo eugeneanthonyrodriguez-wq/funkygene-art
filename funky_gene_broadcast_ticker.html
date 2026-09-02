@@ -495,20 +495,35 @@ async function updateRaceResults() {
           </span>
 
 
-          <span>
-            ${runner.Name}
-          </span>
+         <span>
+  ${runner.Name}
+</span>
 
 
-          <span class="separator">
-            •
-          </span>
+<span class="separator">
+  •
+</span>
 
 
-          <span>
-            ${runner.Split || "ON COURSE"}
-          </span>
+<span>
+  ${
+    runner.Contest ||
+    runner.Race ||
+    runner.Competition ||
+    runner.Distance ||
+    ""
+  }
+</span>
 
+
+<span class="separator">
+  •
+</span>
+
+
+<span>
+  ${runner.Split || "ON COURSE"}
+</span>
 
           <span class="time">
 
