@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -45,6 +46,7 @@ body {
   overflow:hidden;
   background:var(--bg);
   color:var(--white);
+
   font-family:
     Inter,
     Arial,
@@ -52,13 +54,14 @@ body {
     sans-serif;
 }
 
+
 /* =========================
    FULL 16:9 APP
 ========================= */
 
 .app {
-  height:100vh;
   width:100vw;
+  height:100vh;
 
   display:grid;
 
@@ -69,6 +72,7 @@ body {
 
   overflow:hidden;
 }
+
 
 /* =========================
    HEADER
@@ -165,8 +169,9 @@ header {
   font-size:14px;
 }
 
+
 /* =========================
-   STATUS / SEARCH BAR
+   SEARCH / STATUS
 ========================= */
 
 .toolbar {
@@ -251,6 +256,7 @@ header {
   color:var(--orange) !important;
 }
 
+
 /* =========================
    MAIN
 ========================= */
@@ -263,36 +269,32 @@ header {
   display:grid;
 
   grid-template-columns:
-    minmax(0, 1.55fr)
-    minmax(490px, .9fr);
+    minmax(0,1.55fr)
+    minmax(490px,.9fr);
 
   gap:12px;
 }
+
 
 /* =========================
-   MAP SIDE
+   MAP + YOUTUBE SIDE
 ========================= */
+
 .left-column {
   min-height:0;
+
   display:grid;
-  grid-template-rows:minmax(0, 1.35fr) minmax(180px, .65fr);
+
+  grid-template-rows:
+    minmax(0,1.35fr)
+    minmax(180px,.65fr);
+
   gap:12px;
 }
 
-.youtube-panel {
-  min-height:0;
-  overflow:hidden;
-  border-radius:12px;
-  border:1px solid var(--line);
-  background:#000;
-}
 
-.youtube-panel iframe {
-  width:100%;
-  height:100%;
-  border:0;
-  display:block;
-}
+/* MAP */
+
 .map-panel {
   position:relative;
 
@@ -391,6 +393,67 @@ header {
   background:var(--orange);
 }
 
+
+/* YOUTUBE */
+
+.youtube-panel {
+  position:relative;
+
+  min-height:0;
+
+  overflow:hidden;
+
+  border-radius:12px;
+
+  border:1px solid var(--line);
+
+  background:#000;
+}
+
+.youtube-panel iframe {
+  width:100%;
+  height:100%;
+
+  border:0;
+
+  display:block;
+
+  background:#000;
+}
+
+.youtube-placeholder {
+  position:absolute;
+
+  inset:0;
+
+  display:flex;
+
+  align-items:center;
+  justify-content:center;
+
+  padding:20px;
+
+  text-align:center;
+
+  color:#94adbd;
+
+  font-size:13px;
+  font-weight:700;
+
+  background:
+    linear-gradient(
+      135deg,
+      #071923,
+      #0d2233
+    );
+}
+
+.youtube-panel.has-video
+.youtube-placeholder {
+  display:none;
+}
+
+
 /* =========================
    RIGHT DASHBOARD
 ========================= */
@@ -401,8 +464,8 @@ header {
   display:grid;
 
   grid-template-rows:
-    minmax(230px, .8fr)
-    minmax(230px, 1fr);
+    minmax(230px,.8fr)
+    minmax(230px,1fr);
 
   gap:12px;
 }
@@ -469,8 +532,6 @@ header {
   overflow-x:hidden;
 }
 
-/* slim scrollbar */
-
 .rows::-webkit-scrollbar,
 .search-results::-webkit-scrollbar {
   width:6px;
@@ -479,11 +540,13 @@ header {
 .rows::-webkit-scrollbar-thumb,
 .search-results::-webkit-scrollbar-thumb {
   background:#31566e;
+
   border-radius:5px;
 }
 
+
 /* =========================
-   RUNNER ROW
+   RUNNER ROWS
 ========================= */
 
 .runner {
@@ -523,10 +586,6 @@ header {
   text-align:center;
 }
 
-.runner.first .place {
-  color:var(--yellow);
-}
-
 .runner.first {
   background:
     linear-gradient(
@@ -534,6 +593,10 @@ header {
       rgba(255,210,63,.08),
       transparent
     );
+}
+
+.runner.first .place {
+  color:var(--yellow);
 }
 
 .bib {
@@ -558,7 +621,9 @@ header {
   font-weight:1000;
 
   white-space:nowrap;
+
   overflow:hidden;
+
   text-overflow:ellipsis;
 }
 
@@ -570,7 +635,9 @@ header {
   margin-top:4px;
 
   white-space:nowrap;
+
   overflow:hidden;
+
   text-overflow:ellipsis;
 }
 
@@ -588,7 +655,9 @@ header {
   font-weight:900;
 
   white-space:nowrap;
+
   overflow:hidden;
+
   text-overflow:ellipsis;
 }
 
@@ -602,8 +671,9 @@ header {
   font-weight:1000;
 }
 
+
 /* =========================
-   SEARCH RESULTS OVERLAY
+   SEARCH OVERLAY
 ========================= */
 
 .search-overlay {
@@ -617,7 +687,8 @@ header {
   left:16px;
   right:16px;
 
-  max-height:calc(100vh - 155px);
+  max-height:
+    calc(100vh - 155px);
 
   background:#091b28;
 
@@ -644,6 +715,7 @@ header {
   background:var(--deep-blue);
 
   display:flex;
+
   align-items:center;
   justify-content:space-between;
 
@@ -652,11 +724,13 @@ header {
 
 .search-title {
   font-size:16px;
+
   font-weight:1000;
 }
 
 .search-help {
   font-size:11px;
+
   color:#b9cbd5;
 }
 
@@ -677,16 +751,13 @@ header {
     130px;
 }
 
-/* =========================
-   EMPTY / ERROR
-========================= */
-
 .empty {
   height:100%;
 
   min-height:90px;
 
   display:flex;
+
   align-items:center;
   justify-content:center;
 
@@ -699,6 +770,7 @@ header {
   font-size:13px;
 }
 
+
 /* =========================
    LEAFLET
 ========================= */
@@ -709,18 +781,23 @@ header {
 
 .course-start {
   background:#2A7A5E;
+
   border:3px solid white;
+
   border-radius:50%;
 }
 
 .course-finish {
   background:#FF6A3D;
+
   border:3px solid white;
+
   border-radius:50%;
 }
 
+
 /* =========================
-   SMALLER 16:9 LAPTOPS
+   SMALL LAPTOPS
 ========================= */
 
 @media(max-height:800px) {
@@ -747,14 +824,17 @@ header {
 
   .toolbar {
     height:46px;
+
     padding:5px 12px;
   }
 
   .main {
     padding:8px;
+
     gap:8px;
   }
 
+  .left-column,
   .right {
     gap:8px;
   }
@@ -766,6 +846,7 @@ header {
 
   .runner {
     min-height:48px;
+
     padding:5px 8px;
   }
 
@@ -780,15 +861,18 @@ header {
 }
 
 </style>
+
 </head>
+
 
 <body>
 
 <div class="app">
 
-<!-- =================================
+
+<!-- =========================
      HEADER
-================================== -->
+========================= -->
 
 <header>
 
@@ -812,6 +896,7 @@ header {
 
   </div>
 
+
   <div class="header-right">
 
     <div class="clock">
@@ -829,6 +914,7 @@ header {
 
     </div>
 
+
     <div class="live">
       ● LIVE
     </div>
@@ -837,9 +923,10 @@ header {
 
 </header>
 
-<!-- =================================
+
+<!-- =========================
      SEARCH / STATUS
-================================== -->
+========================= -->
 
 <div class="toolbar">
 
@@ -859,87 +946,138 @@ header {
 
   </div>
 
+
   <div class="stat">
+
     RACE RESULT:
+
     <strong id="connectionStatus">
       CONNECTING
     </strong>
+
   </div>
 
+
   <div class="stat">
+
     UPDATED:
+
     <strong id="lastUpdate">
       --
     </strong>
+
   </div>
 
+
   <div class="stat">
+
     RUNNERS:
+
     <strong id="runnerCount">
       0
     </strong>
+
   </div>
 
 </div>
 
-<!-- =================================
-     MAIN 16:9 GRID
-================================== -->
+
+<!-- =========================
+     MAIN
+========================= -->
 
 <div class="main">
 
+
+  <!-- LEFT SIDE -->
+
   <div class="left-column">
 
-    <!-- MAP -->
 
-  <section class="map-panel">
+    <!-- COURSE MAP -->
 
-    <div id="map"></div>
+    <section class="map-panel">
 
-    <div class="map-overlay">
+      <div id="map"></div>
 
-      <div class="map-title">
-        COURSE MAP
+
+      <div class="map-overlay">
+
+        <div class="map-title">
+          COURSE MAP
+        </div>
+
+        <div
+          class="map-sub"
+          id="mapStatus">
+
+          Loading NEWMARATHON.gpx…
+
+        </div>
+
       </div>
 
-      <div
-        class="map-sub"
-        id="mapStatus">
-        Loading NEWMARATHON.gpx…
+
+      <div class="map-legend">
+
+        <div class="legend-row">
+
+          <span class="legend-line"></span>
+
+          Course
+
+        </div>
+
+
+        <div class="legend-row">
+
+          <span class="legend-dot"></span>
+
+          Start / Finish
+
+        </div>
+
       </div>
-
-    </div>
-
-    <div class="map-legend">
-
-      <div class="legend-row">
-        <span class="legend-line"></span>
-        Course
-      </div>
-
-      <div class="legend-row">
-        <span class="legend-dot"></span>
-        Start / Finish
-      </div>
-
-    </div>
 
     </section>
 
-    <!-- YOUTUBE LIVE BROADCAST -->
-        <div class="youtube-panel">
+
+    <!-- YOUTUBE LIVE -->
+
+    <section
+      class="youtube-panel"
+      id="youtubePanel">
+
+
       <iframe
         id="youtubePlayer"
         title="Funky Gene Live Broadcast"
         allow="autoplay; encrypted-media; picture-in-picture"
         allowfullscreen>
       </iframe>
-    </div>
+
+
+      <div
+        class="youtube-placeholder"
+        id="youtubePlaceholder">
+
+        YOUTUBE LIVE BROADCAST
+        <br>
+        Paste the race-day YouTube link in the code.
+
+      </div>
+
+
+    </section>
+
 
   </div>
 
+
   <!-- RIGHT SIDE -->
+
   <div class="right">
+
 
     <!-- TOP 5 -->
 
@@ -957,6 +1095,7 @@ header {
 
       </div>
 
+
       <div
         class="rows"
         id="topFive">
@@ -964,7 +1103,8 @@ header {
 
     </section>
 
-    <!-- LATEST -->
+
+    <!-- LATEST RESULTS -->
 
     <section class="panel">
 
@@ -977,10 +1117,13 @@ header {
         <div
           class="panel-count"
           id="latestCount">
+
           0 RESULTS
+
         </div>
 
       </div>
+
 
       <div
         class="rows"
@@ -989,19 +1132,22 @@ header {
 
     </section>
 
+
   </div>
 
 </div>
 
 </div>
 
-<!-- =================================
+
+<!-- =========================
      SEARCH OVERLAY
-================================== -->
+========================= -->
 
 <div
   id="searchOverlay"
   class="search-overlay">
+
 
   <div class="search-header">
 
@@ -1015,35 +1161,55 @@ header {
 
   </div>
 
+
   <div
     id="searchResults"
     class="search-results">
   </div>
 
+
 </div>
+
 
 <script>
 
-/* =================================
+
+/* =========================
    RACE RESULT
-================================= */
+========================= */
 
 const RACE_RESULT_URL =
   "http://localhost/_DEMOE/api/XP7OBROL70L60QAVZX5US6I0UQ7EQYXY";
 
 
-/* =================================
+/* =========================
    RACEMAP PARTICIPANT FEED
-   Saved for future live-map work.
-================================= */
+========================= */
 
 const RACEMAP_ACCESS_URL =
   "http://localhost/_DEMOE/api/T9LA4GO6TA4ZI3MCCEBKKHEABNPTG1LU";
 
-const YOUTUBE_VIDEO_ID = "PASTE_VIDEO_ID_HERE";
-/* =================================
+
+/* =========================
+   YOUTUBE LIVE
+
+   ON RACE DAY:
+
+   Replace the text below with
+   your YouTube live link.
+
+   Example:
+
+   https://www.youtube.com/watch?v=ABC123
+========================= */
+
+const YOUTUBE_VIDEO =
+  "PASTE_YOUTUBE_LINK_HERE";
+
+
+/* =========================
    GPX COURSE
-================================= */
+========================= */
 
 const GPX_URL =
   "./NEWMARATHON.gpx";
@@ -1052,32 +1218,20 @@ const GPX_URL =
 let raceData = [];
 
 
-/* =================================
-   YOUTUBE LIVE BROADCAST
-================================= */
-
-const youtubePlayer =
-  document.getElementById("youtubePlayer");
-
-if (
-  YOUTUBE_VIDEO_ID &&
-  YOUTUBE_VIDEO_ID !== "PASTE_VIDEO_ID_HERE"
-) {
-  youtubePlayer.src =
-    `https://www.youtube.com/embed/${YOUTUBE_VIDEO_ID}?autoplay=0&rel=0`;
-}
-
-/* =================================
+/* =========================
    CLOCK
-================================= */
+========================= */
 
 function updateClock() {
 
   const now =
     new Date();
 
+
   document
-    .getElementById("clockTime")
+    .getElementById(
+      "clockTime"
+    )
     .textContent =
       now.toLocaleTimeString(
         [],
@@ -1088,8 +1242,11 @@ function updateClock() {
         }
       );
 
+
   document
-    .getElementById("clockDate")
+    .getElementById(
+      "clockDate"
+    )
     .textContent =
       now.toLocaleDateString(
         [],
@@ -1102,7 +1259,9 @@ function updateClock() {
 
 }
 
+
 updateClock();
+
 
 setInterval(
   updateClock,
@@ -1110,9 +1269,210 @@ setInterval(
 );
 
 
-/* =================================
+/* =========================
+   YOUTUBE
+========================= */
+
+function getYouTubeVideoId(value) {
+
+  const input =
+    String(
+      value || ""
+    )
+    .trim();
+
+
+  if (
+    !input ||
+    input ===
+      "PASTE_YOUTUBE_LINK_HERE"
+  ) {
+
+    return "";
+
+  }
+
+
+  /* VIDEO ID ONLY */
+
+  if (
+    !input.includes("/") &&
+    !input.includes("?")
+  ) {
+
+    return input;
+
+  }
+
+
+  try {
+
+    const url =
+      new URL(input);
+
+
+    /* youtu.be/VIDEOID */
+
+    if (
+      url.hostname.includes(
+        "youtu.be"
+      )
+    ) {
+
+      return url.pathname
+        .replace(
+          /^\/+/,
+          ""
+        )
+        .split("/")[0];
+
+    }
+
+
+    /* youtube.com/watch?v=VIDEOID */
+
+    const watchID =
+      url.searchParams.get(
+        "v"
+      );
+
+
+    if (watchID) {
+
+      return watchID;
+
+    }
+
+
+    /* youtube.com/live/VIDEOID
+       youtube.com/embed/VIDEOID
+       youtube.com/shorts/VIDEOID */
+
+    const parts =
+      url.pathname
+        .split("/")
+        .filter(Boolean);
+
+
+    const markers =
+      [
+        "live",
+        "embed",
+        "shorts"
+      ];
+
+
+    for (
+      let i = 0;
+      i < parts.length - 1;
+      i++
+    ) {
+
+      if (
+        markers.includes(
+          parts[i]
+        )
+      ) {
+
+        return parts[
+          i + 1
+        ];
+
+      }
+
+    }
+
+  }
+
+  catch(error) {
+
+    console.warn(
+      "YouTube URL error:",
+      error
+    );
+
+  }
+
+
+  return "";
+
+}
+
+
+function loadYouTubePlayer() {
+
+  const panel =
+    document.getElementById(
+      "youtubePanel"
+    );
+
+
+  const player =
+    document.getElementById(
+      "youtubePlayer"
+    );
+
+
+  const placeholder =
+    document.getElementById(
+      "youtubePlaceholder"
+    );
+
+
+  const videoId =
+    getYouTubeVideoId(
+      YOUTUBE_VIDEO
+    );
+
+
+  if (!videoId) {
+
+    player.removeAttribute(
+      "src"
+    );
+
+
+    panel
+      .classList
+      .remove(
+        "has-video"
+      );
+
+
+    placeholder.innerHTML =
+      "YOUTUBE LIVE BROADCAST<br>Paste the race-day YouTube link in the code.";
+
+
+    return;
+
+  }
+
+
+  player.src =
+    "https://www.youtube.com/embed/"
+    +
+    encodeURIComponent(
+      videoId
+    )
+    +
+    "?rel=0";
+
+
+  panel
+    .classList
+    .add(
+      "has-video"
+    );
+
+}
+
+
+loadYouTubePlayer();
+
+
+/* =========================
    MAP
-================================= */
+========================= */
 
 const map =
   L.map(
@@ -1127,15 +1487,17 @@ L.tileLayer(
   "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
   {
     maxZoom:19,
+
     attribution:
       "&copy; OpenStreetMap"
   }
-).addTo(map);
+)
+.addTo(map);
 
 
-/* =================================
-   LOAD GPX
-================================= */
+/* =========================
+   LOAD GPX COURSE
+========================= */
 
 async function loadCourse() {
 
@@ -1143,6 +1505,7 @@ async function loadCourse() {
     document.getElementById(
       "mapStatus"
     );
+
 
   try {
 
@@ -1154,6 +1517,7 @@ async function loadCourse() {
         }
       );
 
+
     if (!response.ok) {
 
       throw new Error(
@@ -1162,17 +1526,21 @@ async function loadCourse() {
 
     }
 
+
     const text =
       await response.text();
 
+
     const parser =
       new DOMParser();
+
 
     const xml =
       parser.parseFromString(
         text,
         "application/xml"
       );
+
 
     const points =
       [
@@ -1181,6 +1549,7 @@ async function loadCourse() {
         )
       ];
 
+
     if (!points.length) {
 
       throw new Error(
@@ -1188,6 +1557,7 @@ async function loadCourse() {
       );
 
     }
+
 
     const latLngs =
       points.map(
@@ -1209,21 +1579,19 @@ async function loadCourse() {
       );
 
 
-    /* COURSE LINE */
-
     const course =
       L.polyline(
         latLngs,
         {
           color:"#FF6A3D",
+
           weight:5,
+
           opacity:.95
         }
       )
       .addTo(map);
 
-
-    /* START */
 
     const startIcon =
       L.divIcon(
@@ -1236,19 +1604,6 @@ async function loadCourse() {
         }
       );
 
-    L.marker(
-      latLngs[0],
-      {
-        icon:startIcon
-      }
-    )
-    .addTo(map)
-    .bindPopup(
-      "<strong>START</strong>"
-    );
-
-
-    /* FINISH */
 
     const finishIcon =
       L.divIcon(
@@ -1260,6 +1615,19 @@ async function loadCourse() {
             [18,18]
         }
       );
+
+
+    L.marker(
+      latLngs[0],
+      {
+        icon:startIcon
+      }
+    )
+    .addTo(map)
+    .bindPopup(
+      "<strong>START</strong>"
+    );
+
 
     L.marker(
       latLngs[
@@ -1286,17 +1654,23 @@ async function loadCourse() {
 
     const courseName =
       xml
-      .querySelector(
-        "trk > name"
-      )
-      ?.textContent
-      ?.trim()
+        .querySelector(
+          "trk > name"
+        )
+        ?.textContent
+        ?.trim()
       ||
       "Course";
 
 
     status.textContent =
-      `${courseName} • ${points.length} course points`;
+      courseName
+      +
+      " • "
+      +
+      points.length
+      +
+      " course points";
 
   }
 
@@ -1307,8 +1681,10 @@ async function loadCourse() {
       error
     );
 
+
     status.textContent =
       "Course file not loaded yet";
+
 
     map.setView(
       [37.8,-122.2],
@@ -1319,12 +1695,13 @@ async function loadCourse() {
 
 }
 
+
 loadCourse();
 
 
-/* =================================
+/* =========================
    DATA HELPERS
-================================= */
+========================= */
 
 function getValue(
   object,
@@ -1347,6 +1724,7 @@ function getValue(
 
   }
 
+
   return "";
 
 }
@@ -1358,16 +1736,21 @@ function cleanHTML(value) {
     value === undefined ||
     value === null
   ) {
+
     return "";
+
   }
+
 
   const temp =
     document.createElement(
       "div"
     );
 
+
   temp.innerHTML =
     String(value);
+
 
   return (
     temp.textContent ||
@@ -1379,9 +1762,9 @@ function cleanHTML(value) {
 }
 
 
-/* =================================
-   NORMALIZE RACE RESULT FIELDS
-================================= */
+/* =========================
+   NORMALIZE RACE RESULT
+========================= */
 
 function normalizeRunner(
   runner,
@@ -1400,6 +1783,7 @@ function normalizeRunner(
       )
     );
 
+
   const last =
     cleanHTML(
       getValue(
@@ -1411,6 +1795,7 @@ function normalizeRunner(
         ]
       )
     );
+
 
   let name =
     cleanHTML(
@@ -1425,10 +1810,17 @@ function normalizeRunner(
       )
     );
 
+
   if (!name) {
 
     name =
-      `${first} ${last}`
+      (
+        first
+        +
+        " "
+        +
+        last
+      )
       .trim();
 
   }
@@ -1437,6 +1829,7 @@ function normalizeRunner(
   return {
 
     raw:runner,
+
 
     place:
       cleanHTML(
@@ -1456,6 +1849,7 @@ function normalizeRunner(
       ||
       index + 1,
 
+
     bib:
       cleanHTML(
         getValue(
@@ -1469,9 +1863,11 @@ function normalizeRunner(
         )
       ),
 
+
     name:
       name ||
       "Unknown Runner",
+
 
     club:
       cleanHTML(
@@ -1485,6 +1881,7 @@ function normalizeRunner(
         )
       ),
 
+
     contest:
       cleanHTML(
         getValue(
@@ -1496,6 +1893,7 @@ function normalizeRunner(
           ]
         )
       ),
+
 
     split:
       cleanHTML(
@@ -1511,6 +1909,7 @@ function normalizeRunner(
         )
       ),
 
+
     time:
       cleanHTML(
         getValue(
@@ -1525,6 +1924,7 @@ function normalizeRunner(
         )
       ),
 
+
     age:
       cleanHTML(
         getValue(
@@ -1535,6 +1935,7 @@ function normalizeRunner(
           ]
         )
       ),
+
 
     gender:
       cleanHTML(
@@ -1552,9 +1953,9 @@ function normalizeRunner(
 }
 
 
-/* =================================
-   HTML ROW
-================================= */
+/* =========================
+   RUNNER HTML
+========================= */
 
 function runnerHTML(
   runner,
@@ -1565,9 +1966,11 @@ function runnerHTML(
     [
       runner.club,
       runner.contest,
+
       runner.age
-        ? `Age ${runner.age}`
+        ? "Age " + runner.age
         : "",
+
       runner.gender
     ]
     .filter(Boolean)
@@ -1576,56 +1979,70 @@ function runnerHTML(
 
   return `
 
-    <div class=
-      "runner ${
-        index === 0
-          ? "first"
-          : ""
-      }"
-    >
+    <div class="runner ${
+      index === 0
+        ? "first"
+        : ""
+    }">
 
       <div class="place">
+
         ${
-          runner.place
-            ? runner.place
-            : "—"
+          runner.place ||
+          "—"
         }
+
       </div>
 
+
       <div class="bib">
+
         ${
           runner.bib
             ? "#" + runner.bib
             : "—"
         }
+
       </div>
+
 
       <div class="runner-name">
 
         <div class="name">
+
           ${runner.name}
+
         </div>
 
+
         <div class="meta">
+
           ${extras || " "}
+
         </div>
 
       </div>
 
+
       <div class="result">
 
         <div class="split">
+
           ${
             runner.split ||
             "ON COURSE"
           }
+
         </div>
 
+
         <div class="time">
+
           ${
             runner.time ||
             ""
           }
+
         </div>
 
       </div>
@@ -1637,9 +2054,9 @@ function runnerHTML(
 }
 
 
-/* =================================
+/* =========================
    DISPLAY DASHBOARD
-================================= */
+========================= */
 
 function displayRaceData() {
 
@@ -1665,6 +2082,7 @@ function displayRaceData() {
       5
     );
 
+
   document
     .getElementById(
       "topFive"
@@ -1673,20 +2091,24 @@ function displayRaceData() {
 
       topFive.length
 
-      ? topFive
-          .map(
-            (runner,index) =>
-              runnerHTML(
-                runner,
-                index
-              )
-          )
-          .join("")
+      ?
 
-      : `
-        <div class="empty">
-          Waiting for leader data…
-        </div>
+      topFive
+        .map(
+          (runner,index) =>
+            runnerHTML(
+              runner,
+              index
+            )
+        )
+        .join("")
+
+      :
+
+      `
+      <div class="empty">
+        Waiting for leader data…
+      </div>
       `;
 
 
@@ -1694,13 +2116,16 @@ function displayRaceData() {
 
   const latest =
     [...runners]
-    .filter(
-      runner =>
-        runner.time ||
-        runner.split
-    )
-    .slice(-12)
-    .reverse();
+
+      .filter(
+        runner =>
+          runner.time ||
+          runner.split
+      )
+
+      .slice(-12)
+
+      .reverse();
 
 
   document
@@ -1711,19 +2136,23 @@ function displayRaceData() {
 
       latest.length
 
-      ? latest
-          .map(
-            runner =>
-              runnerHTML(
-                runner
-              )
-          )
-          .join("")
+      ?
 
-      : `
-        <div class="empty">
-          Waiting for results…
-        </div>
+      latest
+        .map(
+          runner =>
+            runnerHTML(
+              runner
+            )
+        )
+        .join("")
+
+      :
+
+      `
+      <div class="empty">
+        Waiting for results…
+      </div>
       `;
 
 
@@ -1732,24 +2161,28 @@ function displayRaceData() {
       "latestCount"
     )
     .textContent =
-      `${latest.length} RESULTS`;
+      latest.length
+      +
+      " RESULTS";
 
 }
 
 
-/* =================================
+/* =========================
    SEARCH
-================================= */
+========================= */
 
 const searchInput =
   document.getElementById(
     "search"
   );
 
+
 const searchOverlay =
   document.getElementById(
     "searchOverlay"
   );
+
 
 const searchResults =
   document.getElementById(
@@ -1774,9 +2207,11 @@ function searchRunners() {
         "active"
       );
 
+
     searchResults
       .innerHTML =
       "";
+
 
     return;
 
@@ -1807,6 +2242,7 @@ function searchRunners() {
           .join(" ")
           .toLowerCase();
 
+
         return searchable
           .includes(
             query
@@ -1828,23 +2264,27 @@ function searchRunners() {
 
       matches.length
 
-      ? matches
-          .slice(
-            0,
-            50
-          )
-          .map(
-            runner =>
-              runnerHTML(
-                runner
-              )
-          )
-          .join("")
+      ?
 
-      : `
-        <div class="empty">
-          No runner found.
-        </div>
+      matches
+        .slice(
+          0,
+          50
+        )
+        .map(
+          runner =>
+            runnerHTML(
+              runner
+            )
+        )
+        .join("")
+
+      :
+
+      `
+      <div class="empty">
+        No runner found.
+      </div>
       `;
 
 }
@@ -1857,9 +2297,9 @@ searchInput
   );
 
 
-/* =================================
+/* =========================
    RACE RESULT FETCH
-================================= */
+========================= */
 
 async function updateRaceResults() {
 
@@ -1883,7 +2323,9 @@ async function updateRaceResults() {
     if (!response.ok) {
 
       throw new Error(
-        `HTTP ${response.status}`
+        "HTTP "
+        +
+        response.status
       );
 
     }
@@ -1935,6 +2377,7 @@ async function updateRaceResults() {
     status.textContent =
       "CONNECTED";
 
+
     status.className =
       "connected";
 
@@ -1948,12 +2391,9 @@ async function updateRaceResults() {
           .toLocaleTimeString(
             [],
             {
-              hour:
-                "2-digit",
-              minute:
-                "2-digit",
-              second:
-                "2-digit"
+              hour:"2-digit",
+              minute:"2-digit",
+              second:"2-digit"
             }
           );
 
@@ -1975,6 +2415,7 @@ async function updateRaceResults() {
     status.textContent =
       "CONNECTION ERROR";
 
+
     status.className =
       "error";
 
@@ -1988,16 +2429,13 @@ async function updateRaceResults() {
 updateRaceResults();
 
 
-/* RACE RESULT SIMPLE API
-   cache is approximately
-   10-30 seconds, so 20 sec
-   is appropriate here.
-*/
+/* UPDATE EVERY 20 SECONDS */
 
 setInterval(
   updateRaceResults,
   20000
 );
+
 
 </script>
 
