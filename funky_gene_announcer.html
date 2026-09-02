@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Funky Gene Announcer Dashboard</title>
+
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    background: #071521;
+    color: #EAEAF1;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  header {
+    background: linear-gradient(90deg, #0B2D4D, #195E7A);
+    padding: 20px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 4px solid #FF6A3D;
+  }
+
+  .event-title {
+    font-size: 30px;
+    font-weight: 900;
+    letter-spacing: 1px;
+  }
+
+  .event-subtitle {
+    margin-top: 5px;
+    font-size: 15px;
+    color: #c8d9e4;
+  }
+
+  .live {
+    background: #FFD23F;
+    color: #071521;
+    padding: 9px 16px;
+    border-radius: 8px;
+    font-weight: 900;
+  }
+
+  .statusbar {
+    background: #0d2233;
+    padding: 10px 28px;
+    font-size: 14px;
+    display: flex;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+
+  .status-good {
+    color: #7ee2a8;
+    font-weight: bold;
+  }
+
+  main {
+    padding: 24px;
+  }
+
+  .search-box {
+    width: 100%;
+    background: #102738;
+    border: 2px solid #195E7A;
+    border-radius: 12px;
+    padding: 16px 18px;
+    font-size: 22px;
+    color: white;
+    outline: none;
+    margin-bottom: 24px;
+  }
+
+  .search-box:focus {
+    border-color: #FF6A3D;
+  }
+
+  .dashboard {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+  }
+
+  .panel {
+    background: #0d2233;
+    border: 1px solid #23465d;
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .panel-title {
+    padding: 14px 18px;
+    background: #0B2D4D;
+    font-size: 20px;
+    font-weight: 900;
+    border-bottom: 3px solid #2A7A5E;
+  }
+
+  .runner {
+    display: grid;
+    grid-template-columns: 70px 90px 1fr 140px 150px;
+    align-items: center;
+    gap: 10px;
+
+    padding: 14px 16px;
+    border-bottom: 1px solid #1f4055;
+  }
+
+  .runner:last-child {
+    border-bottom: none;
+  }
+
+  .place {
+    font-size: 25px;
+    font-weight: 900;
+    color: #FFD23F;
+  }
+
+  .bib {
+    background: #195E7A;
+    padding: 7px 10px;
+    border-radius: 7px;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  .name {
+    font-size: 20px;
+    font-weight: 800;
+  }
+
+  .secondary {
+    font-size: 13px;
+    color: #9eb4c3;
+    margin-top: 4px;
+  }
+
+  .split {
+    color: #71d7ae;
+    font-weight: 800;
+  }
+
+  .time {
+    font-size: 18px;
+    font-weight: 900;
+    text-align: right;
+  }
+
+  .search-results {
+    display: none;
+    margin-bottom: 24px;
+  }
+
+  .search-results.active {
+    display: block;
+  }
+
+  .empty {
+    padding: 30px;
+    text-align: center;
+    color: #8da5b5;
+  }
+
+  .full-panel {
+    margin-top: 22px;
+  }
+
+  #allRunners {
+    max-height: 600px;
+    overflow-y: auto;
+  }
+
+  @media(max-width: 1000px) {
+    .dashboard {
+      grid-template-columns: 1fr;
+    }
+
+    .runner {
+      grid-template-columns: 55px 75px 1fr;
+    }
+
+    .split,
+    .time {
+      grid-column: auto;
+    }
+  }
+</style>
+</head>
+
+<body>
+
+<header>
+  <div>
+    <div class="event-title">FUNKY GENE — ANNOUNCER DASHBOARD</div>
+    <div class="event-subtitle">Live RACE RESULT timing information</div>
+  </div>
+
+  <div class="live">● LIVE</div>
+</header>
+
+<div class="statusbar">
+  <div>
+    RACE RESULT:
+    <span id="connectionStatus">Connecting...</span>
+  </div>
+
+  <div>
+    Last update:
+    <strong id="lastUpdate">--</strong>
+  </div>
+
+  <div>
+    Runners:
+    <strong id="runnerCount">0</strong>
+  </div>
+</div>
+
+<main>
+
+<input
+  id="search"
+  class="search-box"
+  type="text"
+  placeholder="Search runner by name, bib, club or race..."
+>
+
+<div id="searchPanel" class="panel search-results">
+  <div class="panel-title">RUNNER SEARCH</div>
+  <div id="searchResults"></div>
+</div>
+
+<div class="dashboard">
+
+  <section class="panel">
+    <div class="panel-title">🏆 TOP 5</div>
+    <div id="topFive"></div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-title">🏁 LATEST FINISHERS / RESULTS</div>
+    <div id="latest"></div>
+  </section>
+
+</div>
+
+<section class="panel full-panel">
+  <div class="panel-title">LIVE RACE RESULTS</div>
+  <div id="allRunners"></div>
+</section>
+
+</main>
+
+<script>
+
+const RACE_RESULT_URL =
+"http://localhost/_DEMOE/api/XP7OBROL70L60QAVZX5US6I0UQ7EQYXY";
+
+let raceData = [];
+
+function getValue(runner, possibleNames) {
+  for (const name of possibleNames) {
+    if (
+      runner[name] !== undefined &&
+      runner[name] !== null &&
+      runner[name] !== ""
+    ) {
+      return runner[name];
+    }
+  }
+
+  return "";
+}
+
+function cleanHTML(value) {
+  if (!value) return "";
+
+  const temp = document.createElement("div");
+  temp.innerHTML = String(value);
+
+  return temp.textContent || temp.innerText || "";
+}
+
+function normalizeRunner(runner, index) {
+
+  return {
+    raw: runner,
+
+    place: cleanHTML(
+      getValue(runner, [
+        "Pl",
+        "Place",
+        "Rank",
+        "OverallPlace",
+        "Overall"
+      ])
+    ) || index + 1,
+
+    bib: cleanHTML(
+      getValue(runner, [
+        "Bib",
+        "BibNumber",
+        "StartNo",
+        "StartNumber"
+      ])
+    ),
+
+    name: cleanHTML(
+      getValue(runner, [
+        "Name",
+        "FullName",
+        "DisplayName",
+        "Participant"
+      ])
+    ),
+
+    firstName: cleanHTML(
+      getValue(runner, [
+        "FirstName",
+        "Firstname"
+      ])
+    ),
+
+    lastName: cleanHTML(
+      getValue(runner, [
+        "LastName",
+        "Lastname"
+      ])
+    ),
+
+    club: cleanHTML(
+      getValue(runner, [
+        "Club",
+        "Team",
+        "City"
+      ])
+    ),
+
+    contest: cleanHTML(
+      getValue(runner, [
+        "Contest",
+        "Race",
+        "Competition"
+      ])
+    ),
+
+    split: cleanHTML(
+      getValue(runner, [
+        "Split",
+        "TimingPoint",
+        "Location",
+        "LastSplit"
+      ])
+    ),
+
+    time: cleanHTML(
+      getValue(runner, [
+        "ChipTime",
+        "GunTime",
+        "FinishTime",
+        "Time",
+        "Result"
+      ])
+    ),
+
+    age: cleanHTML(
+      getValue(runner, [
+        "Age",
+        "AgeGroup"
+      ])
+    )
+  };
+}
+
+function runnerName(runner) {
+  if (runner.name) return runner.name;
+
+  return `${runner.firstName} ${runner.lastName}`.trim() || "Unknown Runner";
+}
+
+function runnerHTML(runner) {
+
+  const extra = [
+    runner.club,
+    runner.contest,
+    runner.age ? `Age ${runner.age}` : ""
+  ]
+  .filter(Boolean)
+  .join(" • ");
+
+  return `
+    <div class="runner">
+
+      <div class="place">
+        ${runner.place ? "#" + runner.place : ""}
+      </div>
+
+      <div class="bib">
+        ${runner.bib ? "#" + runner.bib : "—"}
+      </div>
+
+      <div>
+        <div class="name">
+          ${runnerName(runner)}
+        </div>
+
+        <div class="secondary">
+          ${extra}
+        </div>
+      </div>
+
+      <div class="split">
+        ${runner.split || ""}
+      </div>
+
+      <div class="time">
+        ${runner.time || ""}
+      </div>
+
+    </div>
+  `;
+}
+
+function displayRaceData() {
+
+  const normalized = raceData.map(normalizeRunner);
+
+  document.getElementById("runnerCount").textContent =
+    normalized.length;
+
+  const topFive =
+    normalized.slice(0, 5);
+
+  document.getElementById("topFive").innerHTML =
+    topFive.length
+      ? topFive.map(runnerHTML).join("")
+      : `<div class="empty">Waiting for leader data...</div>`;
+
+  const latest =
+    [...normalized]
+      .filter(runner => runner.time || runner.split)
+      .slice(-10)
+      .reverse();
+
+  document.getElementById("latest").innerHTML =
+    latest.length
+      ? latest.map(runnerHTML).join("")
+      : `<div class="empty">Waiting for results...</div>`;
+
+  document.getElementById("allRunners").innerHTML =
+    normalized.length
+      ? normalized.map(runnerHTML).join("")
+      : `<div class="empty">Waiting for race data...</div>`;
+}
+
+function searchRunners() {
+
+  const query =
+    document.getElementById("search")
+      .value
+      .trim()
+      .toLowerCase();
+
+  const panel =
+    document.getElementById("searchPanel");
+
+  const results =
+    document.getElementById("searchResults");
+
+  if (!query) {
+    panel.classList.remove("active");
+    results.innerHTML = "";
+    return;
+  }
+
+  const normalized =
+    raceData.map(normalizeRunner);
+
+  const matches =
+    normalized.filter(runner => {
+
+      const searchable = [
+        runnerName(runner),
+        runner.bib,
+        runner.club,
+        runner.contest,
+        runner.age,
+        runner.split
+      ]
+      .join(" ")
+      .toLowerCase();
+
+      return searchable.includes(query);
+    });
+
+  panel.classList.add("active");
+
+  results.innerHTML =
+    matches.length
+      ? matches.slice(0, 25).map(runnerHTML).join("")
+      : `<div class="empty">No runner found.</div>`;
+}
+
+async function updateRaceResults() {
+
+  const status =
+    document.getElementById("connectionStatus");
+
+  try {
+
+    const response =
+      await fetch(RACE_RESULT_URL, {
+        cache: "no-store"
+      });
+
+    if (!response.ok) {
+      throw new Error(
+        `HTTP ${response.status}`
+      );
+    }
+
+    const data =
+      await response.json();
+
+    if (Array.isArray(data)) {
+      raceData = data;
+    }
+
+    else if (Array.isArray(data.data)) {
+      raceData = data.data;
+    }
+
+    else if (Array.isArray(data.results)) {
+      raceData = data.results;
+    }
+
+    else {
+      raceData = [];
+    }
+
+    status.textContent = "CONNECTED";
+    status.className = "status-good";
+
+    document.getElementById("lastUpdate")
+      .textContent =
+      new Date().toLocaleTimeString();
+
+    displayRaceData();
+
+    searchRunners();
+
+  }
+
+  catch(error) {
+
+    console.error(
+      "RACE RESULT announcer connection error:",
+      error
+    );
+
+    status.textContent = "CONNECTION ERROR";
+    status.style.color = "#FF6A3D";
+  }
+}
+
+document
+  .getElementById("search")
+  .addEventListener(
+    "input",
+    searchRunners
+  );
+
+updateRaceResults();
+
+setInterval(
+  updateRaceResults,
+  20000
+);
+
+</script>
+
+</body>
+</html>
