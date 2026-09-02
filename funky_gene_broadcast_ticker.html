@@ -1,129 +1,834 @@
-<script>
-const RACE_RESULT_URL =
-  "http://localhost/_DEMOE/api/XC7563EAKS747W72CQJQVDV087HV8VEL";
+<!doctype html>
+<html lang="en">
+<head>
 
-const crawl = document.getElementById("crawl");
+<meta charset="utf-8" />
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1"
+/>
+
+<title>
+  Funky Gene Live — Race Ticker
+</title>
 
 
-/* GET RUNNER RACE / DISTANCE */
+<style>
 
-function getRaceDistance(runner) {
+:root{
 
-  return (
-    runner.Contest ||
-    runner.Race ||
-    runner.Competition ||
-    runner.Distance ||
-    runner.Event ||
-    runner.ContestName ||
-    ""
-  );
+  --deep-blue:#0B2D4D;
+  --ocean-blue:#195E7A;
+  --emerald:#2A7A5E;
+  --sunset-orange:#FF6A3D;
+  --white:#EAEAF1;
+  --gold:#FFD23F;
 
 }
 
+
+html,
+body{
+
+  margin:0;
+
+  width:100%;
+  height:100%;
+
+  background:transparent;
+
+  overflow:hidden;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+}
+
+
+.stage{
+
+  position:relative;
+
+  width:100vw;
+  height:100vh;
+
+  background:transparent;
+
+}
+
+
+.ticker{
+
+  position:absolute;
+
+  left:0;
+  right:0;
+
+  bottom:34px;
+
+  height:92px;
+
+  display:flex;
+
+  align-items:stretch;
+
+  color:var(--white);
+
+  filter:
+    drop-shadow(
+      0 5px 10px
+      rgba(0,0,0,.35)
+    );
+
+}
+
+
+.brand{
+
+  flex:0 0 330px;
+
+  display:flex;
+
+  align-items:center;
+
+  gap:14px;
+
+  padding:
+    0 22px;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--deep-blue),
+      var(--ocean-blue)
+    );
+
+  border-top:
+    3px solid
+    var(--emerald);
+
+  border-bottom:
+    3px solid
+    var(--emerald);
+
+  box-sizing:border-box;
+
+  z-index:3;
+
+}
+
+
+.live-dot{
+
+  width:13px;
+  height:13px;
+
+  border-radius:50%;
+
+  background:
+    var(--gold);
+
+  box-shadow:
+    0 0 0 5px
+    rgba(255,210,63,.12);
+
+  flex:none;
+
+}
+
+
+.brand-text{
+
+  line-height:1;
+
+}
+
+
+.brand-title{
+
+  font-size:27px;
+
+  font-weight:900;
+
+  letter-spacing:.7px;
+
+  white-space:nowrap;
+
+}
+
+
+.brand-sub{
+
+  margin-top:7px;
+
+  font-size:15px;
+
+  font-weight:800;
+
+  letter-spacing:1.5px;
+
+  color:
+    var(--gold);
+
+  white-space:nowrap;
+
+}
+
+
+.crawl-window{
+
+  min-width:0;
+
+  flex:
+    1 1 auto;
+
+  position:relative;
+
+  overflow:hidden;
+
+  background:
+    rgba(11,45,77,.94);
+
+  border-top:
+    3px solid
+    var(--emerald);
+
+  border-bottom:
+    3px solid
+    var(--emerald);
+
+  box-sizing:border-box;
+
+}
+
+
+.crawl{
+
+  position:absolute;
+
+  top:0;
+  left:0;
+
+  height:100%;
+
+  display:flex;
+
+  align-items:center;
+
+  width:max-content;
+
+  white-space:nowrap;
+
+  animation:
+    crawl
+    38s
+    linear
+    infinite;
+
+  will-change:
+    transform;
+
+}
+
+
+.item{
+
+  display:inline-flex;
+
+  align-items:center;
+
+  gap:12px;
+
+  padding:
+    0 30px;
+
+  height:56px;
+
+  font-size:25px;
+
+  font-weight:750;
+
+  letter-spacing:.2px;
+
+}
+
+
+.item + .item{
+
+  border-left:
+    1px solid
+    rgba(234,234,241,.27);
+
+}
+
+
+.tag{
+
+  padding:
+    7px 11px 6px;
+
+  border-radius:4px;
+
+  background:
+    var(--emerald);
+
+  color:
+    var(--white);
+
+  font-size:14px;
+
+  font-weight:900;
+
+  letter-spacing:1.1px;
+
+}
+
+
+.tag.finish{
+
+  background:
+    var(--sunset-orange);
+
+}
+
+
+.tag.update{
+
+  background:
+    var(--ocean-blue);
+
+}
+
+
+.tag.leader{
+
+  background:
+    var(--gold);
+
+  color:
+    var(--deep-blue);
+
+}
+
+
+.bib{
+
+  color:
+    var(--gold);
+
+  font-weight:900;
+
+}
+
+
+.time{
+
+  color:
+    var(--white);
+
+  font-weight:900;
+
+}
+
+
+.accent{
+
+  color:
+    var(--sunset-orange);
+
+  font-weight:900;
+
+}
+
+
+.separator{
+
+  color:
+    rgba(234,234,241,.45);
+
+  font-weight:400;
+
+}
+
+
+@keyframes crawl{
+
+  from{
+    transform:
+      translateX(0);
+  }
+
+  to{
+    transform:
+      translateX(-50%);
+  }
+
+}
+
+
+@media
+(prefers-reduced-motion:reduce){
+
+  .crawl{
+    animation:none;
+  }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<main class="stage">
+
+
+<section
+  class="ticker"
+  aria-label="Live race results ticker">
+
+
+  <div class="brand">
+
+
+    <span
+      class="live-dot"
+      aria-hidden="true">
+    </span>
+
+
+    <div class="brand-text">
+
+
+      <div class="brand-title">
+
+        DICK COLLINS FIRETRAILS
+
+      </div>
+
+
+      <div class="brand-sub">
+
+        LIVE RESULTS
+
+      </div>
+
+
+      <div class="brand-sub">
+
+        SATURDAY, SEP 26, 2026
+
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+
+  <div class="crawl-window">
+
+
+    <div
+      class="crawl"
+      id="crawl">
+
+
+      <div class="item">
+
+        <span class="tag leader">
+          LEADER
+        </span>
+
+        <span class="bib">
+          #101
+        </span>
+
+        <span>
+          TEST RUNNER 01
+        </span>
+
+        <span class="separator">
+          •
+        </span>
+
+        <span>
+          100K
+        </span>
+
+        <span class="separator">
+          •
+        </span>
+
+        <span>
+          SKYLINE GATE
+        </span>
+
+        <span class="time">
+          5:41:18
+        </span>
+
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+</section>
+
+
+</main>
+
+
+
+<script>
+
+
+const RACE_RESULT_URL =
+
+  "http://localhost/_DEMOE/api/XC7563EAKS747W72CQJQVDV087HV8VEL";
+
+
+const crawl =
+
+  document.getElementById(
+    "crawl"
+  );
+
+
+/* =================================
+   GET RACE / DISTANCE
+================================= */
+
+function getRaceDistance(
+  runner,
+  index
+) {
+
+
+  let raceDistance =
+
+    runner.Contest
+
+    ||
+
+    runner.Race
+
+    ||
+
+    runner.Competition
+
+    ||
+
+    runner.Distance
+
+    ||
+
+    runner.Event
+
+    ||
+
+    runner.ContestName
+
+    ||
+
+    "";
+
+
+  /*
+     DEMO TEST ONLY
+
+     The RR demo Live list does
+     not contain the race-distance
+     field we expect from the real
+     event.
+
+     This lets us visually test
+     100K / 50K / Marathon.
+
+     It ONLY activates while using
+     the _DEMOE URL.
+  */
+
+
+  if (
+
+    !raceDistance
+
+    &&
+
+    RACE_RESULT_URL.includes(
+      "_DEMOE"
+    )
+
+  ) {
+
+
+    const testDistances =
+
+      [
+        "100K",
+        "50K",
+        "MARATHON"
+      ];
+
+
+    raceDistance =
+
+      testDistances[
+        index %
+        testDistances.length
+      ];
+
+
+  }
+
+
+  return raceDistance;
+
+
+}
+
+
+
+/* =================================
+   LOAD RACE RESULT
+================================= */
 
 async function updateRaceResults() {
 
+
   try {
 
+
     const response =
-      await fetch(RACE_RESULT_URL);
+
+      await fetch(
+
+        RACE_RESULT_URL,
+
+        {
+          cache:"no-store"
+        }
+
+      );
+
 
     const runners =
+
       await response.json();
 
 
-    crawl.innerHTML =
+
+    const items =
+
       runners
-      .slice(0, 10)
-      .map((runner, index) => {
 
-        const raceDistance =
-          getRaceDistance(runner);
+      .slice(
+        0,
+        10
+      )
+
+      .map(
+
+        (
+          runner,
+          index
+        ) => {
 
 
-        return `
-          <div class="item">
+          const raceDistance =
 
-            <span class="tag ${index === 0 ? "leader" : ""}">
+            getRaceDistance(
+              runner,
+              index
+            );
+
+
+          return `
+
+
+            <div class="item">
+
+
+              <span
+                class="tag ${
+                  index === 0
+                    ? "leader"
+                    : runner.Split === "Finish"
+                    ? "finish"
+                    : ""
+                }">
+
+
+                ${
+                  index === 0
+
+                    ? "LEADER"
+
+                    : runner.Split === "Finish"
+
+                    ? "FINISHER"
+
+                    : "SPLIT"
+                }
+
+
+              </span>
+
+
+
+              <span class="bib">
+
+                #${runner.Bib}
+
+              </span>
+
+
+
+              <span>
+
+                ${runner.Name}
+
+              </span>
+
+
 
               ${
-                index === 0
-                  ? "LEADER"
-                  : runner.Split === "Finish"
-                  ? "FINISHER"
-                  : "SPLIT"
-              }
+                raceDistance
 
-            </span>
+                ?
 
-
-            <span class="bib">
-              #${runner.Bib}
-            </span>
-
-
-            <span>
-              ${runner.Name}
-            </span>
-
-
-            ${
-              raceDistance
-                ? `
-                  <span class="separator">•</span>
-
-                  <span>
-                    ${raceDistance}
-                  </span>
                 `
-                : ""
-            }
+
+                <span class="separator">
+
+                  •
+
+                </span>
 
 
-            <span class="separator">•</span>
+                <span>
 
+                  ${raceDistance}
 
-            <span>
-              ${runner.Split || "ON COURSE"}
-            </span>
+                </span>
 
+                `
 
-            <span class="time">
+                :
 
-              ${
-                runner.ChipTime ||
-                runner.GunTime ||
                 ""
               }
 
-            </span>
 
-          </div>
-        `;
 
-      })
+              <span class="separator">
+
+                •
+
+              </span>
+
+
+
+              <span>
+
+                ${
+                  runner.Split
+                  ||
+                  "ON COURSE"
+                }
+
+              </span>
+
+
+
+              <span class="time">
+
+                ${
+                  runner.ChipTime
+                  ||
+                  runner.GunTime
+                  ||
+                  ""
+                }
+
+              </span>
+
+
+            </div>
+
+
+          `;
+
+
+        }
+
+      )
+
       .join("");
 
 
+
+    /*
+       Duplicate the live items once
+       so the existing -50% ticker
+       animation stays seamless.
+    */
+
+
+    crawl.innerHTML =
+
+      items + items;
+
+
   }
 
-  catch (error) {
+
+  catch(error) {
+
 
     console.error(
+
       "RACE RESULT connection error:",
+
       error
+
     );
+
 
   }
 
+
 }
+
 
 
 updateRaceResults();
 
+
 setInterval(
+
   updateRaceResults,
+
   20000
+
 );
+
+
 </script>
+
+
+</body>
+</html>
