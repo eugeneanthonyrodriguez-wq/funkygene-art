@@ -1,3 +1,5 @@
+@import url("bay_area_100_sage.css");
+
 :root {
   --deep-blue: #222222;
   --ocean-blue: #956847;
@@ -25,6 +27,85 @@
   --ultrasignup-dark: #3E7055;
   --ultrasignup-black: #131115;
   --sports-basement: #025937;
+  --frame-highlight: rgba(253,249,237,.82);
+  --frame-sage: rgba(138,189,158,.82);
+  --frame-shadow: rgba(19,17,21,.82);
+}
+
+/* Layered broadcast frame: beveled like a network score graphic, in Firetrails colors. */
+:where(.ticker, .crossing-card, .leaders, .board) {
+  isolation: isolate;
+  border: 2px solid var(--charcoal) !important;
+  border-radius: 12px;
+  filter: none !important;
+  box-shadow:
+    inset 1px 1px 0 var(--frame-highlight),
+    inset -2px -2px 0 var(--frame-shadow),
+    0 0 0 2px var(--sage),
+    0 0 0 4px var(--charcoal),
+    0 0 0 6px var(--brown),
+    0 0 0 7px rgba(253,249,237,.72),
+    7px 9px 0 rgba(19,17,21,.62),
+    0 17px 30px rgba(0,0,0,.42) !important;
+}
+
+:where(.ticker, .crossing-card, .leaders, .board)::before {
+  content: "";
+  position: absolute;
+  z-index: 30;
+  pointer-events: none;
+  inset: -7px;
+  border-radius: 15px;
+  border-top: 2px solid rgba(253,249,237,.92);
+  border-left: 2px solid rgba(253,249,237,.68);
+  border-right: 2px solid rgba(19,17,21,.78);
+  border-bottom: 2px solid rgba(19,17,21,.92);
+  box-shadow:
+    inset 0 0 0 1px rgba(138,189,158,.42),
+    0 0 0 1px rgba(34,34,34,.92);
+}
+
+:where(.ticker, .crossing-card, .leaders, .board)::after {
+  content: "";
+  position: absolute;
+  z-index: 31;
+  pointer-events: none;
+  top: -7px;
+  left: 20px;
+  width: 28%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--cream), transparent);
+  opacity: .88;
+}
+
+/* Smaller matching bevels for the control and announcer workspaces. */
+:where(.app .panel, .app .map-panel, .app .youtube-panel, .app .search-overlay) {
+  border: 1px solid rgba(253,249,237,.56) !important;
+  outline: 2px solid var(--charcoal);
+  box-shadow:
+    inset 1px 1px 0 rgba(149,196,168,.44),
+    inset -2px -2px 0 rgba(19,17,21,.8),
+    0 0 0 3px var(--brown),
+    5px 7px 0 rgba(19,17,21,.5),
+    0 12px 22px rgba(0,0,0,.3) !important;
+}
+
+.app > header,
+.app > .header {
+  border: 1px solid rgba(253,249,237,.58) !important;
+  border-bottom: 4px solid var(--firetrails-red) !important;
+  box-shadow:
+    inset 1px 1px 0 rgba(253,249,237,.44),
+    inset -2px -2px 0 rgba(19,17,21,.72),
+    0 4px 0 var(--charcoal),
+    0 6px 0 var(--brown),
+    0 10px 20px rgba(0,0,0,.3);
+}
+
+:where(.header-row, .top-strip, .topline, .topbar, .panel-head, .panel-header) {
+  box-shadow:
+    inset 0 1px 0 rgba(253,249,237,.32),
+    inset 0 -2px 0 rgba(19,17,21,.7);
 }
 
 /* Firetrails brown gradient with restrained contour-line texture. */
