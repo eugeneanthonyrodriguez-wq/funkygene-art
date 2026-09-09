@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">Firetrails contour broadcast pattern</title>
+  <desc id="desc">Layered contour lines, trail markers, and diagonal broadcast accents.</desc>
+  <defs>
+    <pattern id="microGrid" width="48" height="48" patternUnits="userSpaceOnUse" patternTransform="skewX(-12)">
+      <path d="M48 0H0V48" fill="none" stroke="#FDF9ED" stroke-opacity=".055" stroke-width="1"/>
+      <circle cx="0" cy="0" r="2.2" fill="#95C4A8" fill-opacity=".16"/>
+    </pattern>
+    <linearGradient id="route" x1="40" y1="490" x2="920" y2="45" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#8ABD9E"/>
+      <stop offset=".52" stop-color="#FDF9ED"/>
+      <stop offset="1" stop-color="#ED1B24"/>
+    </linearGradient>
+    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="960" height="540" fill="url(#microGrid)"/>
+
+  <g fill="none" stroke="#FDF9ED" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M-74 98C35 4 158 19 225 89s45 154 124 192 169-9 229 55 80 134 198 102 156-101 253-58" stroke-opacity=".13" stroke-width="2.3"/>
+    <path d="M-55 124C46 43 145 54 199 110s42 132 120 175 171 6 229 69 91 104 194 73 166-91 268-34" stroke-opacity=".18" stroke-width="1.6"/>
+    <path d="M-30 153C53 87 139 88 177 137s34 113 111 157 170 23 227 78 98 80 184 55 170-70 279-20" stroke-opacity=".11" stroke-width="2"/>
+    <path d="M72 460c-68-51-55-136 15-171s135-7 175-63 17-124 88-166 164-15 198 50 2 124 71 164 147 2 205 51 54 118-2 161" stroke-opacity=".16" stroke-width="1.8"/>
+    <path d="M100 438c-47-39-38-99 18-125s119-6 154-57 19-109 79-143 134-12 160 41 4 108 66 142 127 6 178 47 47 91 6 127" stroke-opacity=".1" stroke-width="1.4"/>
+    <path d="M575-38c-24 66 4 117 70 139s133-14 181 34 35 116 97 145 112 9 150 62" stroke-opacity=".12" stroke-width="2.1"/>
+  </g>
+
+  <g fill="none" stroke="url(#route)" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M24 477C135 436 139 340 244 320s150 36 236-27 124-145 218-137 115 70 238 12" stroke-opacity=".23" stroke-width="4" stroke-dasharray="2 13"/>
+    <path d="M24 477C135 436 139 340 244 320s150 36 236-27 124-145 218-137 115 70 238 12" stroke-opacity=".07" stroke-width="13" filter="url(#softGlow)"/>
+  </g>
+
+  <g fill="#FDF9ED" fill-opacity=".7" stroke="#222222" stroke-opacity=".65" stroke-width="2">
+    <circle cx="244" cy="320" r="6"/>
+    <circle cx="480" cy="293" r="6"/>
+    <circle cx="698" cy="156" r="6"/>
+  </g>
+
+  <g fill="none" stroke="#ED1B24" stroke-opacity=".2" stroke-width="2">
+    <path d="M-30 510L230 250M22 558l260-260M711 105L988-172M757 151l277-277"/>
+  </g>
+</svg>
