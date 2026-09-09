@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Funky Gene Live — Animated Lower Third</title>
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;width:100%;height:100%;overflow:hidden;background:transparent;font-family:Arial,Helvetica,sans-serif}
+  .stage{position:relative;width:100vw;height:100vh;overflow:hidden;background:transparent}
+
+  .lower-third{
+    position:absolute;left:70px;bottom:102px;width:min(890px,calc(100vw - 140px));
+    color:var(--cream);isolation:isolate;
+    transform-origin:left center;
+    transition:opacity .34s ease,transform .42s cubic-bezier(.5,0,.7,.2),clip-path .42s ease;
+  }
+
+  .lower-third.is-visible{animation:lower-third-in .72s cubic-bezier(.16,.84,.24,1) both}
+  .lower-third.is-hidden{animation:none!important;opacity:0;transform:translateX(-90px) scaleX(.96);clip-path:inset(0 100% 0 0 round 12px)}
+
+  .lower-third__rail{
+    height:44px;display:flex;align-items:center;justify-content:space-between;
+    padding:0 16px;background:var(--charcoal);border-radius:10px 10px 0 0;
+    border-bottom:3px solid var(--sage);
+  }
+
+  .lower-third__signal{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:1000;letter-spacing:1.5px}
+  .lower-third__signal span:first-child{width:9px;height:9px;border-radius:50%;background:var(--firetrails-red);box-shadow:0 0 0 5px rgba(237,27,36,.13);animation:signal-pulse 1.55s ease-in-out infinite}
+
+  .lower-third__body{
+    position:relative;display:grid;grid-template-columns:126px 1fr 205px;min-height:116px;
+    background:rgba(253,249,237,.985);color:var(--charcoal);overflow:hidden;
+  }
+
+  .lower-third__body::after{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(112deg,transparent 0 58%,rgba(149,196,168,.11) 58.2% 78%,transparent 78.2%);
+  }
+
+  .lower-third__bib{
+    position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    background:linear-gradient(145deg,#a70e15,var(--firetrails-red) 58%,#ff4a50);color:var(--cream);
+    border-right:4px solid var(--charcoal);
+    box-shadow:inset 1px 1px 0 rgba(255,255,255,.3),inset -4px -4px 0 rgba(0,0,0,.18);
+  }
+
+  .lower-third__bib-label{font-size:11px;font-weight:1000;letter-spacing:2px}
+  .lower-third__bib-number{margin-top:4px;font-size:43px;line-height:1;font-weight:1000;font-variant-numeric:tabular-nums}
+
+  .lower-third__identity{position:relative;z-index:1;align-self:center;padding:14px 24px;min-width:0}
+  .lower-third__eyebrow{font-size:12px;font-weight:1000;letter-spacing:2px;color:var(--ultrasignup-dark)}
+  .lower-third__name{margin-top:5px;font-size:34px;line-height:1;font-weight:1000;letter-spacing:.1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .lower-third__detail{margin-top:9px;font-size:15px;font-weight:850;color:var(--topo-brown);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+  .lower-third__badge{
+    position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:12px 16px;text-align:center;color:var(--cream);
+    background:
+      linear-gradient(rgba(34,34,34,.9),rgba(34,34,34,.96)),
+      url("firetrails_pattern.svg") center/cover;
+    border-left:1px solid rgba(19,17,21,.55);
+  }
+  .lower-third__badge-label{font-size:11px;font-weight:1000;letter-spacing:1.7px;color:var(--mint)}
+  .lower-third__badge-value{margin-top:7px;font-size:22px;line-height:1;font-weight:1000}
+
+  .lower-third__foot{
+    height:14px;border-radius:0 0 8px 8px;
+    background:linear-gradient(90deg,var(--firetrails-red) 0 18%,var(--charcoal) 18% 76%,var(--sage) 76% 91%,var(--cream) 91%);
+    box-shadow:inset 0 2px 0 rgba(255,255,255,.18);
+  }
+
+  @keyframes lower-third-in{
+    0%{opacity:0;transform:translateX(-110px) scaleX(.88);clip-path:inset(0 100% 0 0 round 12px)}
+    52%{opacity:1;transform:translateX(0) scaleX(1);clip-path:inset(0 0 0 0 round 12px)}
+    70%{transform:translateX(10px) scaleX(1)}
+    100%{opacity:1;transform:translateX(0) scaleX(1);clip-path:inset(-22px -35px -44px -35px round 12px)}
+  }
+
+  @keyframes signal-pulse{50%{opacity:.46;transform:scale(.78)}}
+
+  @media(max-width:900px){
+    .lower-third{left:34px;width:calc(100vw - 68px)}
+    .lower-third__body{grid-template-columns:105px 1fr 160px}
+    .lower-third__name{font-size:27px}.lower-third__detail{font-size:13px}
+  }
+
+  @media(prefers-reduced-motion:reduce){
+    .lower-third.is-visible,.lower-third__signal span:first-child{animation:none!important}
+  }
+</style>
+<link rel="stylesheet" href="firetrails_theme.css" />
+<link rel="stylesheet" href="firetrails_motion.css" />
+</head>
+<body>
+<main class="stage">
+  <section class="lower-third is-visible" id="lowerThird" aria-live="polite" aria-label="Animated lower third">
+    <div class="lower-third__rail">
+      <div class="event-logos compact" aria-label="Dick Collins Firetrails and Bay Area 100 Series">
+        <span class="brand-logo firetrails-logo" role="img" aria-label="Dick Collins Firetrails"></span>
+        <span class="brand-logo bay100-logo" role="img" aria-label="Bay Area 100 Series"></span>
+      </div>
+      <div class="lower-third__signal"><span></span><span id="signal">LIVE FINISH LINE</span></div>
+    </div>
+
+    <div class="lower-third__body">
+      <div class="lower-third__bib" id="bibBlock">
+        <div class="lower-third__bib-label">BIB</div>
+        <div class="lower-third__bib-number" id="bib">127</div>
+      </div>
+      <div class="lower-third__identity">
+        <div class="lower-third__eyebrow" id="eyebrow">ATHLETE PROFILE</div>
+        <div class="lower-third__name" id="name">TEST RUNNER 01</div>
+        <div class="lower-third__detail" id="detail">100 MILE • DICK COLLINS FIRETRAILS</div>
+      </div>
+      <div class="lower-third__badge">
+        <div class="lower-third__badge-label" id="badgeLabel">STATUS</div>
+        <div class="lower-third__badge-value" id="badgeValue">ON COURSE</div>
+      </div>
+    </div>
+    <div class="lower-third__foot"></div>
+  </section>
+</main>
+
+<script>
+(() => {
+  const params=new URLSearchParams(location.search);
+  const card=document.getElementById("lowerThird");
+  let hideTimer=0;
+
+  const fields={
+    name:document.getElementById("name"),
+    detail:document.getElementById("detail"),
+    eyebrow:document.getElementById("eyebrow"),
+    bib:document.getElementById("bib"),
+    signal:document.getElementById("signal"),
+    badgeLabel:document.getElementById("badgeLabel"),
+    badgeValue:document.getElementById("badgeValue")
+  };
+
+  function clean(value,max){return String(value??"").replace(/[<>]/g,"").slice(0,max)}
+  function update(data={}){
+    Object.entries(fields).forEach(([key,node]) => {
+      if(data[key]!==undefined) node.textContent=clean(data[key],key==="detail"?82:42);
+    });
+    if(data.bib!==undefined) document.getElementById("bibBlock").hidden=!clean(data.bib,12);
+  }
+
+  function show(data={}){
+    clearTimeout(hideTimer);update(data);
+    card.classList.remove("is-hidden","is-visible");
+    void card.offsetWidth;
+    card.classList.add("is-visible");
+    const hold=Number(data.hold??params.get("hold"))||0;
+    if(hold>0) hideTimer=setTimeout(hide,Math.max(1200,hold));
+  }
+
+  function hide(){
+    clearTimeout(hideTimer);
+    card.classList.remove("is-visible");
+    card.classList.add("is-hidden");
+  }
+
+  const initial={};
+  Object.keys(fields).forEach(key => {if(params.has(key)) initial[key]=params.get(key)});
+  show(initial);
+
+  window.addEventListener("message",event => {
+    const message=event.data||{};
+    if(message.type==="funky-gene-lower-third-show") show(message);
+    if(message.type==="funky-gene-lower-third-hide") hide();
+  });
+
+  if("BroadcastChannel" in window){
+    const channel=new BroadcastChannel("funky-gene-graphics");
+    channel.addEventListener("message",event => {
+      const message=event.data||{};
+      if(message.type==="lower-third-show") show(message);
+      if(message.type==="lower-third-hide") hide();
+    });
+  }
+})();
+</script>
+</body>
+</html>
