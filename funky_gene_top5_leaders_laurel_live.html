@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Funky Gene Live — Top 5 Leaders</title>
+<style>
+  :root{
+    --deep-blue:#0B2D4D;
+    --ocean-blue:#195E7A;
+    --emerald:#2A7A5E;
+    --sunset-orange:#FF6A3D;
+    --white:#EAEAF1;
+    --gold:#FFD23F;
+  }
+
+  html,body{
+    margin:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:transparent;
+    font-family:Arial, Helvetica, sans-serif;
+  }
+
+  .stage{
+    position:relative;
+    width:100vw;
+    height:100vh;
+    background:transparent;
+  }
+
+  .leaders{
+    position:absolute;
+    left:70px;
+    bottom:110px;
+    width:610px;
+    filter:drop-shadow(0 7px 14px rgba(0,0,0,.40));
+  }
+
+  .topline{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    height:38px;
+    padding:0 16px;
+    background:var(--ocean-blue);
+    color:var(--white);
+    font-size:17px;
+    font-weight:900;
+    letter-spacing:.8px;
+    border-radius:8px 8px 0 0;
+    box-sizing:border-box;
+  }
+
+  .live{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    font-size:13px;
+    letter-spacing:1.2px;
+    color:var(--gold);
+  }
+
+  .live-dot{
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    background:var(--gold);
+  }
+
+  .section-head{
+    display:grid;
+    grid-template-columns:1fr 150px;
+    background:linear-gradient(90deg,var(--deep-blue),var(--ocean-blue));
+    color:var(--white);
+    border-bottom:3px solid var(--emerald);
+  }
+
+  .section-head div{
+    padding:13px 16px 12px;
+    font-size:24px;
+    font-weight:800;
+  }
+
+  .section-head .split{
+    text-align:center;
+    background:rgba(42,122,94,.45);
+    font-size:18px;
+    letter-spacing:.5px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .rows{
+    background:rgba(234,234,241,.97);
+    border-radius:0 0 8px 8px;
+    overflow:hidden;
+  }
+
+  .row{
+    display:grid;
+    grid-template-columns:62px 70px 1fr 142px;
+    align-items:center;
+    min-height:52px;
+    color:var(--deep-blue);
+    border-bottom:1px solid rgba(11,45,77,.18);
+    box-sizing:border-box;
+  }
+
+  .row:last-child{
+    border-bottom:none;
+  }
+
+  .pos{
+    height:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:25px;
+    font-weight:900;
+    background:rgba(11,45,77,.07);
+  }
+
+  .row.first .pos{
+    background:var(--gold);
+  }
+
+  .bib{
+    font-size:20px;
+    font-weight:900;
+    color:var(--sunset-orange);
+  }
+
+  .name{
+    font-size:21px;
+    font-weight:800;
+    letter-spacing:.1px;
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+  }
+
+  .time{
+    text-align:right;
+    padding-right:16px;
+    font-size:21px;
+    font-weight:900;
+    color:var(--deep-blue);
+  }
+
+  .footer{
+    margin-top:7px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    color:var(--white);
+    font-size:13px;
+    letter-spacing:.8px;
+    opacity:.9;
+  }
+
+  .brand{
+    background:rgba(11,45,77,.92);
+    padding:7px 10px;
+    border-left:4px solid var(--emerald);
+  }
+
+  .updated{
+    background:rgba(11,45,77,.82);
+    padding:7px 10px;
+  }
+</style>
+<link rel="stylesheet" href="firetrails_theme.css" />
+</head>
+
+<body>
+<main class="stage">
+  <section class="leaders" aria-label="Top five race leaders">
+    <div class="topline">
+      <div class="event-logos compact" aria-label="Dick Collins Firetrails and Bay Area 100">
+      <span class="brand-logo firetrails-logo" role="img" aria-label="Dick Collins Firetrails"></span>
+      <span class="brand-logo bay100-logo" role="img" aria-label="Bay Area 100 Series"></span>
+      </div>
+      <span class="live"><span class="live-dot"></span>LIVE RESULTS</span>
+    </div>
+
+    <div class="section-head">
+      <div>TOP 5 OVERALL</div>
+      <div class="split" id="raceName">100K</div>
+    </div>
+
+    <div class="rows" id="rows">
+      <div class="row"><div class="pos">—</div><div class="bib">—</div><div class="name">CONNECTING TO LAUREL…</div><div class="time">—</div></div></div>
+
+    <div class="footer">
+      <span class="brand">FUNKY GENE LIVE</span>
+      <span class="updated" id="status">LAUREL • CONNECTING…</span>
+    </div>
+  </section>
+</main>
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";import{getFirestore,collection,query,where,onSnapshot}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+const cfg={apiKey:"AIzaSyBp8LcXhchXdToRHIOrI15c2sHY6UJvRek",authDomain:"store-9dec1.firebaseapp.com",projectId:"store-9dec1",storageBucket:"store-9dec1.appspot.com",messagingSenderId:"1054660190026",appId:"1:1054660190026:web:d165d9462ae1ac2355abb3",measurementId:"G-JCEW33JZE3"},races=[["100K",174258],["50 MILE",174259],["MARATHON",174260]],data=new Map(),rows=document.getElementById("rows"),raceName=document.getElementById("raceName"),status=document.getElementById("status");let ri=0;
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));function tm(s){s=+s;if(!Number.isFinite(s)||s<0)return"—";return Math.floor(s/3600)+":"+String(Math.floor(s%3600/60)).padStart(2,"0")+":"+String(Math.floor(s%60)).padStart(2,"0")}function current(a){const m=new Map();a.forEach(x=>{if(x.latest===false)return;const k=x.participant_id??x.bib??x.id,o=m.get(k);if(!o||(+x.cum_dist_miles||0)>(+o.cum_dist_miles||0)||(+x.cum_dist_miles||0)===(+o.cum_dist_miles||0)&&(+x.cum_time_seconds||0)>(+o.cum_time_seconds||0))m.set(k,x)});return[...m.values()].sort((a,b)=>(+a.place_overall||9999)-(+b.place_overall||9999)||(+b.cum_dist_miles||0)-(+a.cum_dist_miles||0)).slice(0,5)}
+function render(){const [name,id]=races[ri],a=current(data.get(id)||[]);raceName.textContent=name;status.textContent="LAUREL LIVE • 10 SEC RACE CYCLE";if(!a.length){rows.innerHTML='<div class="row"><div class="pos">—</div><div class="bib">—</div><div class="name">WAITING FOR '+name+' DATA</div><div class="time">—</div></div>';return}rows.innerHTML=a.map((x,i)=>'<div class="row '+(i===0?"first":"")+'"><div class="pos">'+(+x.place_overall||i+1)+'</div><div class="bib">'+esc(x.bib)+'</div><div class="name">'+esc([x.firstname,x.lastname].filter(Boolean).join(" ")||"RUNNER")+'</div><div class="time">'+tm(x.cum_time_seconds??x.gun_time_seconds)+'</div></div>').join("")}
+const db=getFirestore(initializeApp(cfg));races.forEach(([n,id])=>onSnapshot(query(collection(db,"timing","scores","all"),where("race_event_id","==",id)),s=>{data.set(id,s.docs.map(d=>({id:d.id,...d.data()})));render()},e=>{status.textContent="LAUREL DATA ERROR";console.error(e)}));setInterval(()=>{ri=(ri+1)%races.length;render()},10000);render();
+</script></body>
+</html>
