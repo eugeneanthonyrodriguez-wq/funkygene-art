@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Funky Gene Live — Laurel Test Ticker</title>
+<style>
+:root{--deep-blue:#0B2D4D;--ocean-blue:#195E7A;--emerald:#2A7A5E;--sunset-orange:#FF6A3D;--white:#EAEAF1;--gold:#FFD23F}
+html,body{margin:0;width:100%;height:100%;background:transparent;overflow:hidden;font-family:Arial,Helvetica,sans-serif}
+.stage{position:relative;width:100vw;height:100vh;background:transparent}
+.ticker{position:absolute;left:0;right:0;bottom:34px;height:92px;display:flex;align-items:stretch;color:var(--white);filter:drop-shadow(0 5px 10px rgba(0,0,0,.35))}
+.brand{flex:0 0 330px;display:flex;align-items:center;gap:14px;padding:0 22px;background:linear-gradient(90deg,var(--deep-blue),var(--ocean-blue));border-top:3px solid var(--emerald);border-bottom:3px solid var(--emerald);box-sizing:border-box;z-index:3}
+.brand-text{line-height:1}.brand-sub{margin-top:7px;font-size:15px;font-weight:800;letter-spacing:1.5px;color:var(--gold);white-space:nowrap}
+.crawl-window{min-width:0;flex:1 1 auto;position:relative;overflow:hidden;background:rgba(11,45,77,.94);border-top:3px solid var(--emerald);border-bottom:3px solid var(--emerald);box-sizing:border-box}
+.crawl{position:absolute;top:0;left:0;height:100%;display:flex;align-items:center;width:max-content;white-space:nowrap;animation:crawl 70s linear infinite;will-change:transform}
+.item{display:inline-flex;align-items:center;gap:12px;padding:0 30px;height:56px;font-size:25px;font-weight:750;letter-spacing:.2px}.item+.item{border-left:1px solid rgba(234,234,241,.27)}
+.tag,.race-tag{padding:7px 11px 6px;border-radius:4px;background:var(--emerald);color:var(--white);font-size:14px;font-weight:900;letter-spacing:1.1px}
+.tag.finish{background:var(--sunset-orange)}.tag.leader{background:var(--gold);color:var(--deep-blue)}
+.race-tag{background:var(--sunset-orange)}.bib{color:var(--gold);font-weight:900}.time{color:var(--white);font-weight:900}.separator{color:rgba(234,234,241,.45);font-weight:400}
+.status{color:var(--gold);font-weight:900}
+@keyframes crawl{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media(prefers-reduced-motion:reduce){.crawl{animation:none}}
+</style>
+<link rel="stylesheet" href="firetrails_theme.css" />
+</head>
+<body>
+<main class="stage">
+<section class="ticker" aria-label="Live Laurel race results ticker">
+<div class="brand">
+<div class="event-logos compact" aria-label="Dick Collins Firetrails and Bay Area 100">
+<span class="brand-logo firetrails-logo" role="img" aria-label="Dick Collins Firetrails"></span>
+<span class="brand-logo bay100-logo" role="img" aria-label="Bay Area 100 Series"></span>
+</div>
+<div class="brand-text"><div class="brand-sub">LIVE RESULTS — TEST</div><div class="brand-sub">LAUREL TIMING • 100K</div></div>
+</div>
+<div class="crawl-window"><div class="crawl" id="crawl">
+<div class="item"><span class="status">CONNECTING TO LAUREL…</span></div>
+<div class="item"><span class="status">CONNECTING TO LAUREL…</span></div>
+</div></div>
+</section>
+</main>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import { getFirestore, collection, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBp8LcXhchXdToRHIOrI15c2sHY6UJvRek",
+  authDomain: "store-9dec1.firebaseapp.com",
+  projectId: "store-9dec1",
+  storageBucket: "store-9dec1.appspot.com",
+  messagingSenderId: "1054660190026",
+  appId: "1:1054660190026:web:d165d9462ae1ac2355abb3",
+  measurementId: "G-JCEW33JZE3"
+};
+
+const TEST_RACE_EVENT_ID = 174237;
+const RACE_NAMES = {174237:"100K TEST",174258:"100K",174259:"50 MILE",174260:"MARATHON"};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const crawl = document.getElementById("crawl");
+
+function esc(v=""){return String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function formatTime(seconds){
+  const n=Number(seconds); if(!Number.isFinite(n)||n<0)return "";
+  const h=Math.floor(n/3600),m=Math.floor((n%3600)/60),s=Math.floor(n%60);
+  return h+":"+String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
+}
+function runnerItem(r,index){
+  const race=RACE_NAMES[Number(r.race_event_id)]||"RACE";
+  const place=Number(r.place_overall);
+  const atFinish=String(r.name||"").toLowerCase().includes("finish");
+  const label=atFinish?"FINISHER":(place===1?"LEADER":"SPLIT");
+  const cls=atFinish?"finish":(place===1?"leader":"");
+  const fullName=[r.firstname,r.lastname].filter(Boolean).join(" ").trim()||"RUNNER";
+  const time=formatTime(r.cum_time_seconds ?? r.gun_time_seconds);
+  return `<div class="item">
+    <span class="tag ${cls}">${label}</span>
+    <span class="race-tag">${esc(race)}</span>
+    <span class="bib">#${esc(r.bib ?? "")}</span>
+    <span>${esc(fullName)}</span>
+    ${Number.isFinite(place)&&place>0?`<span class="separator">•</span><span>P${place}</span>`:""}
+    <span class="separator">•</span>
+    <span>${esc(r.name || r.location || "ON COURSE")}</span>
+    ${time?`<span class="time">${time}</span>`:""}
+  </div>`;
+}
+function render(rows){
+  if(!rows.length){
+    const msg=`<div class="item"><span class="race-tag">100K TEST</span><span class="status">CONNECTED — WAITING FOR TEST RACE DATA</span></div>`;
+    crawl.innerHTML=msg+msg; return;
+  }
+  const latestRows=rows.filter(r=>r.latest!==false);
+  const source=latestRows.length?latestRows:rows;
+  const byRunner=new Map();
+  for(const r of source){
+    const key=String(r.participant_id ?? r.bib ?? Math.random());
+    const old=byRunner.get(key);
+    if(!old || Number(r.cum_dist_miles||0)>Number(old.cum_dist_miles||0) ||
+       (Number(r.cum_dist_miles||0)===Number(old.cum_dist_miles||0) && Number(r.cum_time_seconds||0)>Number(old.cum_time_seconds||0))){
+      byRunner.set(key,r);
+    }
+  }
+  const top=[...byRunner.values()].sort((a,b)=>{
+    const pa=Number(a.place_overall),pb=Number(b.place_overall);
+    if(Number.isFinite(pa)&&Number.isFinite(pb))return pa-pb;
+    return Number(b.cum_dist_miles||0)-Number(a.cum_dist_miles||0);
+  }).slice(0,10);
+  const html=top.map(runnerItem).join("");
+  crawl.innerHTML=html+html;
+}
+const scores=collection(db,"timing","scores","all");
+const q=query(scores,where("race_event_id","==",TEST_RACE_EVENT_ID));
+onSnapshot(q,snap=>{
+  render(snap.docs.map(d=>({id:d.id,...d.data()})));
+},err=>{
+  console.error("Laurel Firestore error:",err);
+  const msg=`<div class="item"><span class="tag finish">DATA ERROR</span><span>Laurel connection: ${esc(err.code||err.message)}</span></div>`;
+  crawl.innerHTML=msg+msg;
+});
+</script>
+</body>
+</html>
