@@ -1568,13 +1568,13 @@ header {
 
   <button
     class="race-filter"
-    data-race="50K">
+    data-race="50 MILE">
 
-    50K
+    50 MILE
 
     <span
       class="race-filter-count"
-      id="count50K">
+      id="count50MILE">
 
       0
 
@@ -2958,7 +2958,7 @@ function normalizeRunner(
    100 km
    100 Kilometer
 
-   50K
+   50 MILE
    50 km
 
    Marathon
@@ -3030,7 +3030,7 @@ function contestMatches(
   }
 
 
-  if (race === "50K") {
+  if (race === "50 MILE") {
 
 
     return (
@@ -3180,7 +3180,7 @@ function updateRaceCounts() {
 
   document
     .getElementById(
-      "count50K"
+      "count50MILE"
     )
     .textContent =
 
@@ -3190,7 +3190,7 @@ function updateRaceCounts() {
 
           contestMatches(
             runner.contest,
-            "50K"
+            "50 MILE"
           )
 
       ).length;
@@ -3995,6 +3995,14 @@ setInterval(
 </script>
 
 
-</body>
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";import{getFirestore,collection,query,where,onSnapshot}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+const cfg={apiKey:"AIzaSyBp8LcXhchXdToRHIOrI15c2sHY6UJvRek",authDomain:"store-9dec1.firebaseapp.com",projectId:"store-9dec1",storageBucket:"store-9dec1.appspot.com",messagingSenderId:"1054660190026",appId:"1:1054660190026:web:d165d9462ae1ac2355abb3"},EV={"100K":174258,"50 MILE":174259,"MARATHON":174260},R=Object.keys(EV),S=Object.fromEntries(R.map(x=>[x,new Map()]));let ci=0,manual="ALL";const db=getFirestore(initializeApp(cfg)),fmt=s=>{s=+s;if(!s)return"";return Math.floor(s/3600)+":"+String(Math.floor(s%3600/60)).padStart(2,"0")+":"+String(Math.floor(s%60)).padStart(2,"0")},safe=s=>String(s??"").replace(/[&<>]/g,"");
+function sorted(r){return [...S[r].values()].sort((a,b)=>(+a.place_overall||9999)-(+b.place_overall||9999)||(+b.cum_dist_miles||0)-(+a.cum_dist_miles||0))}
+function card(x,i,r,lead){return '<div class="runner '+(lead?'first':'')+'"><div class="place">'+safe(x.place_overall||i+1)+'</div><div class="bib">#'+safe(x.bib||'—')+'</div><div class="runner-name"><div class="name">'+safe((x.firstname||'')+' '+(x.lastname||''))+'</div><div class="meta"><span class="contest-tag">'+r+'</span> • '+safe(x.city||'')+'</div></div><div class="result"><div class="split">'+safe(x.name||x.location||'ON COURSE')+'</div><div class="time">'+fmt(x.cum_time_seconds||x.gun_time_seconds)+'</div></div></div>'}
+function draw(){let r=manual==="ALL"?R[ci]:manual,a=sorted(r).slice(0,5);document.getElementById("topFiveTitle").textContent="★ TOP 5 • "+r;document.getElementById("topFive").innerHTML=a.length?a.map((x,i)=>card(x,i,r,i===0)).join(""):'<div class="empty">Waiting for '+r+' data</div>';let all=[];R.forEach(rr=>S[rr].forEach(x=>all.push({...x,_r:rr})));all.sort((a,b)=>(b._seen||0)-(a._seen||0));let l=all.slice(0,12);document.getElementById("latestTitle").textContent="LATEST RESULTS • ALL RACES";document.getElementById("latestCount").textContent=l.length+" RESULTS";document.getElementById("latest").innerHTML=l.length?l.map(x=>card(x,+x.place_overall||0,x._r,+x.place_overall===1)).join(""):'<div class="empty">Waiting for live results</div>';document.getElementById("runnerCount").textContent=all.length;document.getElementById("countALL").textContent=all.length;document.getElementById("count100K").textContent=S["100K"].size;document.getElementById("count50MILE").textContent=S["50 MILE"].size;document.getElementById("countMARATHON").textContent=S["MARATHON"].size}
+for(const [r,id] of Object.entries(EV))onSnapshot(query(collection(db,"timing","scores","all"),where("race_event_id","==",id)),q=>{let old=S[r],n=new Map(),now=Date.now();q.forEach(d=>{let x=d.data();if(x.latest===false)return;let k=x.participant_id||x.bib||d.id,p=old.get(k),chg=!p||p.cum_time_seconds!==x.cum_time_seconds||p.cum_dist_miles!==x.cum_dist_miles||p.name!==x.name||p.place_overall!==x.place_overall;n.set(k,{...x,_seen:chg?now:(p?._seen||now)})});S[r]=n;document.getElementById("connectionStatus").textContent="LAUREL CONNECTED";document.getElementById("connectionStatus").className="connected";document.getElementById("lastUpdate").textContent=new Date().toLocaleTimeString();draw()});
+document.querySelectorAll(".race-filter").forEach(b=>b.addEventListener("click",()=>{manual=b.dataset.race;document.querySelectorAll(".race-filter").forEach(x=>x.classList.remove("active"));b.classList.add("active");draw()}));setInterval(()=>{if(manual==="ALL"){ci=(ci+1)%R.length;draw()}},10000);
+</script></body>
 
 </html>
