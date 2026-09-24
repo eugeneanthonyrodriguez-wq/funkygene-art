@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Funky Gene Live — Race Timers</title>
+<style>
+:root{--cream:#FDF9ED;--brown:#956847;--topo:#865D41;--charcoal:#222;--sage:#8ABD9E;--mint:#95C4A8;--red:#ED1B24}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:transparent;font-family:Arial,Helvetica,sans-serif}
+.stack{position:absolute;top:45px;right:55px;width:365px;display:grid;gap:9px;filter:drop-shadow(7px 9px 8px rgba(19,17,21,.48))}
+.timer{position:relative;display:grid;grid-template-columns:112px 1fr;min-height:70px;border:2px solid var(--charcoal);outline:2px solid var(--sage);border-radius:8px;overflow:hidden;background:var(--charcoal);box-shadow:0 0 0 4px var(--brown),0 0 0 5px rgba(253,249,237,.7),inset 1px 1px 0 rgba(253,249,237,.6)}
+.race{display:flex;flex-direction:column;justify-content:center;padding:9px 12px;background:linear-gradient(122deg,var(--topo),var(--brown));border-right:3px solid var(--red);color:var(--cream)}
+.race strong{font-size:22px;line-height:1}.race span{font-size:10px;font-weight:900;letter-spacing:1.3px;margin-top:6px;color:var(--mint)}
+.clock{display:flex;align-items:center;justify-content:center;color:var(--cream);font-size:34px;font-weight:900;letter-spacing:1px;font-variant-numeric:tabular-nums}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--red);display:inline-block;margin-right:5px;box-shadow:0 0 0 4px rgba(237,27,36,.13)}
+.status{position:absolute;right:6px;bottom:4px;color:var(--mint);font-size:8px;font-weight:900;letter-spacing:.8px}
+</style></head><body>
+<div class="stack">
+<div class="timer"><div class="race"><strong>100K</strong><span><i class="dot"></i>RACE TIME</span></div><div class="clock" id="c174258">00:00:00</div><div class="status" id="s174258">LAUREL LIVE</div></div>
+<div class="timer"><div class="race"><strong>50 MILE</strong><span><i class="dot"></i>RACE TIME</span></div><div class="clock" id="c174259">00:00:00</div><div class="status" id="s174259">LAUREL LIVE</div></div>
+<div class="timer"><div class="race"><strong>MARATHON</strong><span><i class="dot"></i>RACE TIME</span></div><div class="clock" id="c174260">00:00:00</div><div class="status" id="s174260">LAUREL LIVE</div></div>
+</div>
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";import{getFirestore,collection,query,where,onSnapshot}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+const cfg={apiKey:"AIzaSyBp8LcXhchXdToRHIOrI15c2sHY6UJvRek",authDomain:"store-9dec1.firebaseapp.com",projectId:"store-9dec1",storageBucket:"store-9dec1.appspot.com",messagingSenderId:"1054660190026",appId:"1:1054660190026:web:d165d9462ae1ac2355abb3",measurementId:"G-JCEW33JZE3"};
+const ids=[174258,174259,174260],state={};const fmt=s=>{s=Math.max(0,Math.floor(+s||0));return String(Math.floor(s/3600)).padStart(2,"0")+":"+String(Math.floor(s%3600/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")};
+function draw(id){const x=state[id];if(!x)return;document.getElementById("c"+id).textContent=fmt(x.base+(Date.now()-x.at)/1000)}
+const db=getFirestore(initializeApp(cfg));ids.forEach(id=>onSnapshot(query(collection(db,"timing","scores","all"),where("race_event_id","==",id)),snap=>{let best=0;snap.forEach(d=>{const x=d.data();best=Math.max(best,+x.gun_time_seconds||0,+x.cum_time_seconds||0)});if(best>0){state[id]={base:best,at:Date.now()};document.getElementById("s"+id).textContent="LAUREL LIVE"}else document.getElementById("s"+id).textContent="WAITING FOR START";draw(id)},()=>document.getElementById("s"+id).textContent="DATA ERROR"));setInterval(()=>ids.forEach(draw),1000);
+</script></body></html>
