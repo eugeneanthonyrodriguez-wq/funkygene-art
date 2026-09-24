@@ -1348,6 +1348,11 @@ header {
 
 }
 
+
+/* THREE-PANEL RIGHT COLUMN + EMBEDDED SITES */
+.right{min-height:0;display:grid!important;grid-template-rows:minmax(150px,.75fr) minmax(260px,1.25fr) minmax(150px,.75fr)!important;gap:8px!important}
+.runner-lookup-panel{display:flex!important;min-height:260px!important;visibility:visible!important}
+.runner-lookup-panel iframe{display:block!important;width:100%!important;min-height:210px!important;flex:1!important;border:0!important;background:#fff!important}
 </style>
 <link rel="stylesheet" href="firetrails_theme.css" />
 
@@ -1610,60 +1615,11 @@ header {
   <div class="left-column">
 
 
-    <!-- COURSE MAP -->
+    <!-- LAUREL LIVE TRACKING -->
 
     <section class="map-panel">
-
-
-      <div id="map"></div>
-
-
-      <div class="map-overlay">
-
-
-        <div class="map-title">
-
-          COURSE MAP
-
-        </div>
-
-
-        <div
-          class="map-sub"
-          id="mapStatus">
-
-          Loading NEWMARATHON.gpx…
-
-        </div>
-
-
-      </div>
-
-
-      <div class="map-legend">
-
-
-        <div class="legend-row">
-
-          <span class="legend-line"></span>
-
-          Course
-
-        </div>
-
-
-        <div class="legend-row">
-
-          <span class="legend-dot"></span>
-
-          Start / Finish
-
-        </div>
-
-
-      </div>
-
-
+      <iframe src="https://track.laurelt.com/?h=dcf" title="Laurel Firetrails Live Tracking" style="width:100%;height:100%;border:0;background:#fff;display:block"></iframe>
+      <div class="map-overlay"><div class="map-title">LAUREL LIVE TRACKING</div><div class="map-sub">Interactive Firetrails course tracking</div></div>
     </section>
 
 
