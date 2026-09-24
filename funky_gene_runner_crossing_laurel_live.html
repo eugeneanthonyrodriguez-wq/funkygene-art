@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Funky Gene Live — Runner Crossing</title>
+<style>
+  :root{
+    --deep-blue:#0B2D4D;
+    --ocean-blue:#195E7A;
+    --emerald:#2A7A5E;
+    --sunset-orange:#FF6A3D;
+    --white:#EAEAF1;
+    --gold:#FFD23F;
+  }
+
+  html,body{
+    margin:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:transparent;
+    font-family:Arial, Helvetica, sans-serif;
+  }
+
+  .stage{
+    position:relative;
+    width:100vw;
+    height:100vh;
+    background:transparent;
+  }
+
+  .crossing-card{
+    position:absolute;
+    left:70px;
+    bottom:120px;
+    width:650px;
+    color:var(--white);
+    filter:drop-shadow(0 8px 16px rgba(0,0,0,.42));
+    animation:slideIn .55s ease-out both;
+  }
+
+  .top-strip{
+    height:38px;
+    padding:0 16px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:var(--ocean-blue);
+    border-radius:8px 8px 0 0;
+    box-sizing:border-box;
+    font-size:14px;
+    font-weight:900;
+    letter-spacing:1px;
+  }
+
+  .live{
+    color:var(--gold);
+    display:flex;
+    align-items:center;
+    gap:7px;
+  }
+
+  .live-dot{
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    background:var(--gold);
+  }
+
+  .headline{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:linear-gradient(90deg,var(--deep-blue),var(--ocean-blue));
+    border-bottom:3px solid var(--emerald);
+    padding:15px 18px;
+  }
+
+  .headline-main{
+    font-size:25px;
+    font-weight:900;
+    letter-spacing:.5px;
+  }
+
+  .timing-point{
+    padding:8px 12px;
+    background:var(--emerald);
+    border-radius:4px;
+    font-size:15px;
+    font-weight:900;
+    letter-spacing:.7px;
+  }
+
+  .runner{
+    display:grid;
+    grid-template-columns:110px 1fr 160px;
+    align-items:center;
+    background:rgba(234,234,241,.98);
+    color:var(--deep-blue);
+    min-height:112px;
+  }
+
+  .bib-block{
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    background:var(--gold);
+    color:var(--deep-blue);
+  }
+
+  .bib-label{
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:1.3px;
+    margin-bottom:3px;
+  }
+
+  .bib-number{
+    font-size:38px;
+    font-weight:900;
+    line-height:1;
+  }
+
+  .identity{
+    padding:0 18px;
+    min-width:0;
+  }
+
+  .name{
+    font-size:28px;
+    font-weight:900;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+
+  .detail{
+    margin-top:8px;
+    font-size:16px;
+    font-weight:800;
+    color:var(--ocean-blue);
+  }
+
+  .time-block{
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    background:var(--deep-blue);
+    color:var(--white);
+  }
+
+  .time-label{
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:1.2px;
+    color:var(--gold);
+  }
+
+  .time{
+    margin-top:5px;
+    font-size:27px;
+    font-weight:900;
+  }
+
+  .footer{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    min-height:38px;
+    padding:0 14px;
+    background:rgba(11,45,77,.94);
+    border-radius:0 0 8px 8px;
+    font-size:14px;
+    font-weight:800;
+  }
+
+  .position{
+    color:var(--white);
+  }
+
+  .position strong{
+    color:var(--sunset-orange);
+  }
+
+  .movement{
+    color:var(--gold);
+  }
+
+  @keyframes slideIn{
+    from{
+      opacity:0;
+      transform:translateX(-42px);
+    }
+    to{
+      opacity:1;
+      transform:translateX(0);
+    }
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .crossing-card{animation:none;}
+  }
+</style>
+<link rel="stylesheet" href="firetrails_theme.css" />
+</head>
+<body>
+<main class="stage">
+  <section class="crossing-card" id="card" aria-label="Runner timing point update">
+    <div class="top-strip">
+      <div class="event-logos compact" aria-label="Dick Collins Firetrails and Bay Area 100">
+      <span class="brand-logo firetrails-logo" role="img" aria-label="Dick Collins Firetrails"></span>
+      <span class="brand-logo bay100-logo" role="img" aria-label="Bay Area 100 Series"></span>
+      </div>
+      <span class="live"><span class="live-dot"></span>LIVE TIMING</span>
+    </div>
+
+    <div class="headline">
+      <div class="headline-main">RUNNER CROSSING</div>
+      <div class="timing-point" id="point">WAITING FOR DATA</div>
+    </div>
+
+    <div class="runner">
+      <div class="bib-block">
+        <div class="bib-label">BIB</div>
+        <div class="bib-number" id="bib">—</div>
+      </div>
+
+      <div class="identity">
+        <div class="name" id="runnerName">LAUREL CONNECTING…</div>
+        <div class="detail" id="detail">Live Laurel timing</div>
+      </div>
+
+      <div class="time-block">
+        <div class="time-label">ELAPSED</div>
+        <div class="time" id="elapsed">—</div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <span class="position">Position: <strong id="position">—</strong></span>
+      <span class="movement" id="race">100K / 50 MILE / MARATHON</span>
+    </div>
+  </section>
+</main>
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";import{getFirestore,collection,query,where,onSnapshot}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+const cfg={apiKey:"AIzaSyBp8LcXhchXdToRHIOrI15c2sHY6UJvRek",authDomain:"store-9dec1.firebaseapp.com",projectId:"store-9dec1",storageBucket:"store-9dec1.appspot.com",messagingSenderId:"1054660190026",appId:"1:1054660190026:web:d165d9462ae1ac2355abb3",measurementId:"G-JCEW33JZE3"},events={174258:"100K",174259:"50 MILE",174260:"MARATHON"},seen=new Map(),candidates=[];
+const $=id=>document.getElementById(id);function tm(s){s=+s;if(!Number.isFinite(s)||s<0)return"—";return Math.floor(s/3600)+":"+String(Math.floor(s%3600/60)).padStart(2,"0")+":"+String(Math.floor(s%60)).padStart(2,"0")}function key(x){return String(x.participant_id??x.bib??x.id)}
+function show(x,event){$("bib").textContent=x.bib??"—";$("runnerName").textContent=[x.firstname,x.lastname].filter(Boolean).join(" ")||"RUNNER";$("point").textContent=x.name||x.location||"TIMING UPDATE";$("elapsed").textContent=tm(x.cum_time_seconds??x.gun_time_seconds);$("position").textContent=(x.place_overall?x.place_overall+" overall":"—");$("race").textContent=events[event];$("detail").textContent="Live Laurel timing • "+events[event];const card=$("card");card.style.animation="none";void card.offsetWidth;card.style.animation="slideIn .55s ease-out both"}
+function process(docs,event){for(const x of docs){if(x.latest===false)continue;const k=event+":"+key(x),sig=[x.name,x.location,x.cum_dist_miles,x.cum_time_seconds,x.place_overall].join("|"),old=seen.get(k);seen.set(k,sig);if(old!==undefined&&old!==sig)candidates.push({x,event,at:Date.now()})}if(candidates.length){candidates.sort((a,b)=>b.at-a.at);const z=candidates.shift();show(z.x,z.event);candidates.length=0}}
+const db=getFirestore(initializeApp(cfg));Object.keys(events).forEach(id=>onSnapshot(query(collection(db,"timing","scores","all"),where("race_event_id","==",+id)),s=>process(s.docs.map(d=>({id:d.id,...d.data()})),+id),e=>{$("runnerName").textContent="LAUREL DATA ERROR";console.error(e)}));
+</script></body>
+</html>
