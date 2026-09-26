@@ -2134,7 +2134,7 @@ function loadYouTubePlayer() {
   panel.classList.add("has-video");
   const chat = document.getElementById("youtubeChat");
   if (chat) {
-    chat.src = "https://www.youtube.com/live_chat?v=" + encodeURIComponent(videoId) + "&embed_domain=" + encodeURIComponent(window.location.hostname);
+    chat.src = "https://www.youtube.com/live_chat?v=" + encodeURIComponent(videoId) + "&embed_domain=" + encodeURIComponent(window.location.hostname) + "&dark_theme=1";
   }
 
 
