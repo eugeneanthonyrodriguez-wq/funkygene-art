@@ -13,14 +13,24 @@
 .status{position:absolute;right:6px;bottom:4px;color:var(--mint);font-size:8px;font-weight:900;letter-spacing:.8px}
 </style></head><body>
 <div class="stack">
-<div class="timer"><div class="race"><strong>100K</strong><span><i class="dot"></i>RACE TIME</span></div><div class="clock" id="c174258">00:00:00</div><div class="status" id="s174258">LAUREL LIVE</div></div>
-<div class="timer"><div class="race"><strong>50 MILE</strong><span><i class="dot"></i>RACE TIME</span></div><div class="clock" id="c174259">00:00:00</div><div class="status" id="s174259">LAUREL LIVE</div></div>
-<div class="timer"><div class="race"><strong>MARATHON</strong><span><i class="dot"></i>RACE TIME</span></div><div class="clock" id="c174260">00:00:00</div><div class="status" id="s174260">LAUREL LIVE</div></div>
+<div class="timer"><div class="race"><strong>100K</strong><span><i class="dot"></i>RACE TIME</span></div><div class="clock" id="c174258">00:00:00</div><div class="status" id="s174258">STARTS 5:15 AM</div></div>
+<div class="timer"><div class="race"><strong>50 MILE</strong><span><i class="dot"></i>RACE TIME</span></div><div class="clock" id="c174259">00:00:00</div><div class="status" id="s174259">STARTS 6:00 AM</div></div>
+<div class="timer"><div class="race"><strong>MARATHON</strong><span><i class="dot"></i>RACE TIME</span></div><div class="clock" id="c174260">00:00:00</div><div class="status" id="s174260">STARTS 8:00 AM</div></div>
 </div>
-<script type="module">
-import{initializeApp}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";import{getFirestore,collection,query,where,onSnapshot}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-const cfg={apiKey:"AIzaSyBp8LcXhchXdToRHIOrI15c2sHY6UJvRek",authDomain:"store-9dec1.firebaseapp.com",projectId:"store-9dec1",storageBucket:"store-9dec1.appspot.com",messagingSenderId:"1054660190026",appId:"1:1054660190026:web:d165d9462ae1ac2355abb3",measurementId:"G-JCEW33JZE3"};
-const ids=[174258,174259,174260],state={};const fmt=s=>{s=Math.max(0,Math.floor(+s||0));return String(Math.floor(s/3600)).padStart(2,"0")+":"+String(Math.floor(s%3600/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")};
-function draw(id){const x=state[id];if(!x)return;document.getElementById("c"+id).textContent=fmt(x.base+(Date.now()-x.at)/1000)}
-const db=getFirestore(initializeApp(cfg));ids.forEach(id=>onSnapshot(query(collection(db,"timing","scores","all"),where("race_event_id","==",id)),snap=>{let best=0;snap.forEach(d=>{const x=d.data();best=Math.max(best,+x.gun_time_seconds||0,+x.cum_time_seconds||0)});if(best>0){state[id]={base:best,at:Date.now()};document.getElementById("s"+id).textContent="LAUREL LIVE"}else document.getElementById("s"+id).textContent="WAITING FOR START";draw(id)},()=>document.getElementById("s"+id).textContent="DATA ERROR"));setInterval(()=>ids.forEach(draw),1000);
+<script>
+const races={
+  174258:{start:"2026-09-26T05:15:00-07:00",label:"STARTS 5:15 AM"},
+  174259:{start:"2026-09-26T06:00:00-07:00",label:"STARTS 6:00 AM"},
+  174260:{start:"2026-09-26T08:00:00-07:00",label:"STARTS 8:00 AM"}
+};
+const fmt=s=>{s=Math.max(0,Math.floor(s));return String(Math.floor(s/3600)).padStart(2,"0")+":"+String(Math.floor(s%3600/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")};
+function draw(){
+  const now=Date.now();
+  Object.entries(races).forEach(([id,race])=>{
+    const elapsed=(now-Date.parse(race.start))/1000;
+    document.getElementById("c"+id).textContent=fmt(elapsed);
+    document.getElementById("s"+id).textContent=elapsed>=0?"RACE LIVE":race.label;
+  });
+}
+draw();setInterval(draw,1000);
 </script></body></html>
