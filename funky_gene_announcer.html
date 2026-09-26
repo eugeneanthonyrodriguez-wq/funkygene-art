@@ -1356,10 +1356,6 @@ header {
 .youtube-live-grid{width:100%;height:100%;display:grid;grid-template-rows:minmax(0,42%) minmax(0,58%);grid-template-columns:1fr;gap:0;background:#000}
 .youtube-live-grid iframe{width:100%!important;height:100%!important;border:0!important;display:block!important;background:#000}
 #youtubeChat{width:100%!important;height:100%!important;min-height:0!important;border-left:0!important;border-top:2px solid var(--orange)!important;background:#fff!important}
-.race-clocks{display:flex;align-items:center;gap:7px}
-.race-clock{min-width:105px;padding:6px 9px;border:1px solid #31566e;border-radius:7px;background:#071923;text-align:center}
-.race-clock span{display:block;color:#8ABD9E;font-size:9px;font-weight:1000;letter-spacing:.7px}
-.race-clock strong{display:block;color:#FDF9ED;font-size:17px;font-variant-numeric:tabular-nums;margin-top:2px}
 </style>
 <link rel="stylesheet" href="firetrails_theme.css" />
 
@@ -1412,10 +1408,26 @@ header {
 
 
   <div class="header-right">
-    <div class="race-clocks" aria-label="Race elapsed times">
-      <div class="race-clock"><span>100K</span><strong id="clock100k">--:--:--</strong></div>
-      <div class="race-clock"><span>50 MILE</span><strong id="clock50m">--:--:--</strong></div>
-      <div class="race-clock"><span>MARATHON</span><strong id="clockMarathon">--:--:--</strong></div>
+
+
+    <div class="clock">
+
+
+      <div
+        class="clock-time"
+        id="clockTime">
+
+        --:--:--
+
+      </div>
+
+
+      <div
+        class="clock-date"
+        id="clockDate">
+      </div>
+
+
     </div>
 
 
