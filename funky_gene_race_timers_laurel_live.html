@@ -11,7 +11,13 @@
 .clock{display:flex;align-items:center;justify-content:center;color:var(--cream);font-size:34px;font-weight:900;letter-spacing:1px;font-variant-numeric:tabular-nums}
 .dot{width:7px;height:7px;border-radius:50%;background:var(--red);display:inline-block;margin-right:5px;box-shadow:0 0 0 4px rgba(237,27,36,.13)}
 .status{position:absolute;right:6px;bottom:4px;color:var(--mint);font-size:8px;font-weight:900;letter-spacing:.8px}
-</style></head><body>
+
+html.tree-mode .race{padding:9px 8px}
+html.tree-mode .race strong{font-size:18px;line-height:1.05;letter-spacing:-.3px;white-space:nowrap}
+html.tree-mode .race span{font-size:9px;letter-spacing:.8px}
+</style>
+<script>if(new URLSearchParams(location.search).get("tree")==="1")document.documentElement.classList.add("tree-mode");</script>
+</head><body>
 <div class="stack">
 <div class="timer"><div class="race"><strong>100K</strong><span><i class="dot"></i>RACE TIME</span></div><div class="clock" id="c174258">00:00:00</div><div class="status" id="s174258">STARTS 5:15 AM</div></div>
 <div class="timer"><div class="race"><strong>50 MILE</strong><span><i class="dot"></i>RACE TIME</span></div><div class="clock" id="c174259">00:00:00</div><div class="status" id="s174259">STARTS 6:00 AM</div></div>
